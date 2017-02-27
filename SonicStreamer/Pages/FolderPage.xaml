@@ -1,0 +1,296 @@
+﻿<Page
+    x:Class="SonicStreamer.Pages.FolderPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:SonicStreamer.Controls"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{StaticResource FolderVM}"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/CommandBarStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/PivotStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/TextBoxStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ListViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ListingItemStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/SplitViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <CollectionViewSource
+                x:Name="FolderListViewSource"
+                IsSourceGrouped="True"
+                Source="{Binding SubFolders}" />
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Page.BottomAppBar>
+        <CommandBar
+            OverflowButtonVisibility="Visible"
+            Style="{StaticResource OrangeCommandBarStyle}"
+            Visibility="{Binding IsBottomAppBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <CommandBar.Resources>
+                <Style BasedOn="{StaticResource OrangeAppBarButtonStyle}" TargetType="AppBarButton" />
+            </CommandBar.Resources>
+            <AppBarButton Icon="Play" Label="Play Selection">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="Click">
+                        <core:CallMethodAction MethodName="PlayClick" TargetObject="{Binding Mode=OneWay}" />
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </AppBarButton>
+            <AppBarButton Icon="Add" Label="Add to Playback">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="Click">
+                        <core:CallMethodAction MethodName="AddClick" TargetObject="{Binding Mode=OneWay}" />
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </AppBarButton>
+            <AppBarButton Icon="Favorite" Label="Add to Playlist">
+                <AppBarButton.Flyout>
+                    <Flyout
+                        x:Name="PlaylistFlyout"
+                        Closed="PlaylistFlyout_Closed"
+                        Opening="PlaylistFlyout_Opening">
+                        <StackPanel MinWidth="250" DataContext="{StaticResource PlaylistVM}">
+                            <ComboBox
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Stretch"
+                                ItemsSource="{Binding AvailablePlaylists}"
+                                PlaceholderText="Select a playlist"
+                                SelectedItem="{Binding SelectedAddToPlaylist, Mode=TwoWay}"
+                                Style="{StaticResource OrangeComboBoxStyle}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                                <ComboBox.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource OrangeComboBoxItemStyle}" TargetType="ComboBoxItem" />
+                                </ComboBox.ItemContainerStyle>
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="SelectionChanged">
+                                        <core:CallMethodAction MethodName="AddToPlaylistComboBox_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                            </ComboBox>
+                            <TextBox
+                                Margin="0,0,0,5"
+                                PlaceholderText="New Playlist Name"
+                                Style="{StaticResource OrangeTextBoxStyle}"
+                                Text="{Binding NewPlaylistName, Mode=TwoWay}"
+                                Visibility="{Binding IsNewPlaylistTextBoxVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <Button
+                                HorizontalAlignment="Center"
+                                Click="AddToPlayback_Click"
+                                Content="Add to Playlist"
+                                IsEnabled="{Binding IsAddToPlaylistButtonEnabled}"
+                                Style="{StaticResource OrangeButtonStyle}">
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Click">
+                                        <core:CallMethodAction MethodName="AddToPlaylistClick" TargetObject="{StaticResource FolderVM}" />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                            </Button>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Download" Label="Download">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="Click">
+                        <core:CallMethodAction MethodName="DownloadTracksClick" TargetObject="{Binding Mode=OneWay}" />
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton
+                    x:Name="HamburgerButton"
+                    DataContext="{StaticResource MainVM}"
+                    Style="{StaticResource SplitViewHamburgerButtonStyle}">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="Click">
+                            <core:CallMethodAction MethodName="HamburgerButtonClick" TargetObject="{Binding Mode=OneWay}" />
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </RadioButton>
+                <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="folder" />
+            </StackPanel>
+            <Grid Grid.Column="1" HorizontalAlignment="Right">
+                <ToggleButton IsChecked="{Binding SelectionMode, Mode=TwoWay, Converter={StaticResource SelectionModeToBooleanConverter}}" Style="{StaticResource PlaybackToggleButtonStyle}">
+                    <SymbolIcon Symbol="Bullets" />
+                </ToggleButton>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ListView
+                Margin="10,0,0,0"
+                Padding="5,0,0,0"
+                HorizontalAlignment="Left"
+                IsItemClickEnabled="True"
+                ItemsSource="{Binding History}"
+                SelectionMode="None">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="ItemClick">
+                        <core:CallMethodAction MethodName="Folder_Click" TargetObject="{Binding Mode=OneWay}" />
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource OrangeSubtitleTextBlockStyle}" Text="{Binding Name}" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Margin="5,0"
+                                Style="{StaticResource OrangeSubtitleTextBlockStyle}"
+                                Text="&gt;" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <controls:WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+            <Pivot Grid.Row="1" SelectedIndex="{Binding SelectedPivotItem, Mode=TwoWay}">
+                <PivotItem Header="folders">
+                    <SemanticZoom x:Name="SemanticZoomContainer">
+                        <SemanticZoom.ZoomedOutView>
+                            <GridView
+                                Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                ItemContainerStyle="{StaticResource ZoomedOutGridViewItemStyle}"
+                                ItemTemplate="{StaticResource ZoomedOutGridViewItemTemplate}"
+                                ItemsPanel="{StaticResource ZoomedOutGridViewItemsPanelTemplate}"
+                                ScrollViewer.IsHorizontalScrollChainingEnabled="False" />
+                        </SemanticZoom.ZoomedOutView>
+                        <SemanticZoom.ZoomedInView>
+                            <ListView
+                                IsItemClickEnabled="{Binding IsItemClickEnabled}"
+                                ItemsSource="{Binding Source={StaticResource FolderListViewSource}}"
+                                SelectionMode="{Binding SelectionMode}">
+                                <ListView.GroupStyle>
+                                    <GroupStyle HeaderTemplate="{StaticResource ListingGroupHeaderStyle}" />
+                                </ListView.GroupStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="100" />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="Segoe MDL2 Assets"
+                                                FontSize="50"
+                                                Text="&#xE188;" />
+                                            <Image
+                                                Grid.Row="0"
+                                                Canvas.ZIndex="1"
+                                                Source="{Binding Cover.Uri}" />
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Width="100"
+                                                Height="40"
+                                                Margin="10,5"
+                                                Style="{StaticResource BodyTextBlockStyle}"
+                                                Text="{Binding Name}"
+                                                TextAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource ListViewItemStyle}" TargetType="ListViewItem">
+                                        <Setter Property="Padding" Value="10" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <ItemsWrapGrid Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="ItemClick">
+                                        <core:CallMethodAction MethodName="Folder_Click" TargetObject="{Binding Mode=OneWay}" />
+                                    </core:EventTriggerBehavior>
+                                    <core:EventTriggerBehavior EventName="SelectionChanged">
+                                        <core:CallMethodAction MethodName="FolderItem_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                            </ListView>
+                        </SemanticZoom.ZoomedInView>
+                    </SemanticZoom>
+                </PivotItem>
+                <PivotItem Header="tracks">
+                    <ListView
+                        MaxWidth="800"
+                        IsMultiSelectCheckBoxEnabled="False"
+                        ItemTemplate="{StaticResource TrackListItemTemplate}"
+                        ItemsSource="{Binding Current.Tracks}"
+                        SelectionMode="{Binding TracksSelectionMode}">
+                        <ListView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource ListViewItemStyle}" TargetType="ListViewItem">
+                                <Setter Property="Margin" Value="0,0,10,0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <interactivity:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="SelectionChanged">
+                                <core:CallMethodAction MethodName="FolderItem_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
+                            </core:EventTriggerBehavior>
+                        </interactivity:Interaction.Behaviors>
+                    </ListView>
+                </PivotItem>
+            </Pivot>
+        </Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HamburgerButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HamburgerButton.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</Page>

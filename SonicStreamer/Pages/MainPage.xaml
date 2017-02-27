@@ -1,0 +1,640 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SonicStreamer"
+    xmlns:common="using:SonicStreamer.Common"
+    xmlns:triggers="using:SonicStreamer.Common.System"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    x:Class="SonicStreamer.MainPage"
+    mc:Ignorable="d"
+    NavigationCacheMode="Required"
+    DataContext="{StaticResource MainVM}">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/SplitViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/SliderStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="48" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+
+        <SplitView x:Name="MainSplitView" Grid.Row="1" Grid.ColumnSpan="3" IsPaneOpen="{Binding IsPaneOpen}">
+            <SplitView.Pane>
+                <Grid Background="{StaticResource SplitViewBackgroundBrush}">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource SplitViewTextBlockStyle}" />
+                        <Style TargetType="RadioButton" BasedOn="{StaticResource SplitViewRadioButtonStyle}" />
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ScrollViewer>
+                        <StackPanel x:Name="RadioButtonContainer">
+
+                            <RadioButton GroupName="Nav" Style="{StaticResource SplitViewHamburgerButtonStyle}">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE700;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="HamburgerButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                            <RadioButton Content="Home" GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE10F;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="HomeButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                            <RadioButton Content="Search" GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE094;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="SearchButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                            <RadioButton Content="Artist" GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE125;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="ArtistsButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                            <RadioButton Content="Albums" GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE958;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="AlbumsButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                            <RadioButton Content="Folder" GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xEC50;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="FolderButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                            <RadioButton Content="Playlist" GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE208;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="PlaylistButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                            <RadioButton Content="Podcast" GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE1D5;" />
+                                </RadioButton.Tag>
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="Click">
+                                        <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                               MethodName="PodcastButtonClick" />
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </RadioButton>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="1">
+
+                        <RadioButton Content="Settings" GroupName="Nav">
+                            <RadioButton.Tag>
+                                <TextBlock Text="&#xE115;" />
+                            </RadioButton.Tag>
+                            <Interactivity:Interaction.Behaviors>
+                                <Core:EventTriggerBehavior EventName="Click">
+                                    <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                           MethodName="SettingsButtonClick" />
+                                </Core:EventTriggerBehavior>
+                            </Interactivity:Interaction.Behaviors>
+                        </RadioButton>
+
+                        <RadioButton Content="Logout" GroupName="Nav" Click="LogoutButtonClick">
+                            <RadioButton.Tag>
+                                <TextBlock Text="&#xE7E8;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                    </StackPanel>
+
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Frame x:Name="ContentFrame" Content="{Binding MainFrame}" />
+                    <!-- playback -->
+                    <UserControl
+                        x:Name="PlaybackPanel"
+                        Grid.Row="1"
+                        Height="68"
+                        DataContext="{StaticResource PlaybackVM}"
+                        Visibility="{Binding IsPlaybackPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="0" />
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Target="WidePlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="SmallPlaybackPanel.Visibility" Value="Visible" />
+                                            <Setter Target="XboxPlaybackPanel.Visibility" Value="Collapsed" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="500" />
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Target="WidePlaybackPanel.Visibility" Value="Visible" />
+                                            <Setter Target="SmallPlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="XboxPlaybackPanel.Visibility" Value="Collapsed" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <triggers:DeviceFamilyTrigger DeviceFamily="Windows.Xbox" />
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Target="WidePlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="SmallPlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="XboxPlaybackPanel.Visibility" Value="Visible" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Grid x:Name="SmallPlaybackPanel"
+                                  Visibility="{Binding IsSmallPlaybackEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="164" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="5,0">
+                                        <Image Source="ms-appx:///Assets/cover.png" />
+                                        <Image Source="{Binding CurrentTrack.Cover.Uri}" Canvas.ZIndex="1" />
+                                    </Grid>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding CurrentTrack.Name}"
+                                                   Style="{StaticResource OrangeItemTitleTextBlockStyle}" />
+                                        <TextBlock Text="{Binding CurrentTrack.Artist}"
+                                                   Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" />
+                                    </StackPanel>
+                                    <Interactivity:Interaction.Behaviors>
+                                        <Core:EventTriggerBehavior EventName="Tapped">
+                                            <Core:CallMethodAction TargetObject="{StaticResource MainVM}"
+                                                                   MethodName="PlaybackButtonClick" />
+                                        </Core:EventTriggerBehavior>
+                                    </Interactivity:Interaction.Behaviors>
+                                </Grid>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlayPrevious" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="Previous" />
+                                    </Button>
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="Play" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="{Binding PlayButtonIcon}" />
+                                    </Button>
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlayNext" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="Next" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="XboxPlaybackPanel">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="5,0">
+                                        <Image Source="ms-appx:///Assets/cover.png" />
+                                        <Image Source="{Binding CurrentTrack.Cover.Uri}" Canvas.ZIndex="1" />
+                                    </Grid>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding CurrentTrack.Name}"
+                                                   Style="{StaticResource OrangeItemTitleTextBlockStyle}" />
+                                        <TextBlock Text="{Binding CurrentTrack.Artist}"
+                                                   Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="1" Margin="5,0" VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Slider
+                                        Grid.ColumnSpan="2"
+                                        Maximum="{Binding CurrentTrackDuration}"
+                                        Value="{Binding CurrentTrackPosition, Mode=TwoWay}"
+                                        IsThumbToolTipEnabled="False"
+                                        Style="{StaticResource OrangeSliderStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="PointerCaptureLost">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlaybackSlider_PointerCaptureLost" />
+                                            </Core:EventTriggerBehavior>
+                                            <Core:EventTriggerBehavior EventName="PointerEntered">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlaybackSlider_PointerEntered" />
+                                            </Core:EventTriggerBehavior>
+                                            <Core:EventTriggerBehavior EventName="PointerExited">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlaybackSlider_PointerExited" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                    </Slider>
+                                    <TextBlock Grid.Row="1" Text="{Binding PlayedDuration}"
+                                               Style="{StaticResource OrangeCaptionTextBlockStyle}" />
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding RemainingDuration}"
+                                               Style="{StaticResource OrangeCaptionTextBlockStyle}"
+                                               HorizontalAlignment="Right" />
+                                </Grid>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlayPrevious" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="Previous" />
+                                    </Button>
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="Play" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="{Binding PlayButtonIcon}" />
+                                    </Button>
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlayNext" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="Next" />
+                                    </Button>
+                                    <Line Y1="40" Stroke="Orange" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" Margin="5,0" />
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon x:Name="XboxVolumeButtonIcon" Symbol="Volume" />
+                                        <Button.Flyout>
+                                            <Flyout Opening="Flyout_Opening">
+                                                <Slider
+                                                    x:Name="XboxVolumeSlider"
+                                                    Height="150"
+                                                    Style="{StaticResource OrangeSliderStyle}"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Vertical"
+                                                    ValueChanged="VolumeSlider_ValueChanged" />
+                                                <Flyout.FlyoutPresenterStyle>
+                                                    <Style TargetType="FlyoutPresenter">
+                                                        <Setter Property="Background" Value="Black" />
+                                                        <Setter Property="BorderBrush" Value="Orange" />
+                                                        <Setter Property="MinWidth" Value="50" />
+                                                        <Setter Property="Width" Value="50" />
+                                                    </Style>
+                                                </Flyout.FlyoutPresenterStyle>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <Line Y1="40" Stroke="Orange" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" Margin="5,0" />
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="More" />
+                                        <Button.Flyout>
+                                            <Flyout>
+                                                <StackPanel>
+                                                    <ToggleButton Background="Transparent"
+                                                                  Style="{StaticResource PlaybackToggleButtonStyle}"
+                                                                  IsChecked="{Binding IsRepeating, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Center">
+                                                        <Interactivity:Interaction.Behaviors>
+                                                            <Core:EventTriggerBehavior EventName="Checked">
+                                                                <Core:CallMethodAction
+                                                                    TargetObject="{Binding Mode=OneWay}"
+                                                                    MethodName="SwitchOnRepeatingMode" />
+                                                            </Core:EventTriggerBehavior>
+                                                            <Core:EventTriggerBehavior EventName="Unchecked">
+                                                                <Core:CallMethodAction
+                                                                    TargetObject="{Binding Mode=OneWay}"
+                                                                    MethodName="SwitchOffRepeatingMode" />
+                                                            </Core:EventTriggerBehavior>
+                                                        </Interactivity:Interaction.Behaviors>
+                                                        <SymbolIcon Symbol="RepeatAll" />
+                                                    </ToggleButton>
+                                                    <ToggleButton Background="Transparent"
+                                                                  Style="{StaticResource PlaybackToggleButtonStyle}"
+                                                                  IsChecked="{Binding IsShuffling, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Center">
+                                                        <Interactivity:Interaction.Behaviors>
+                                                            <Core:EventTriggerBehavior EventName="Checked">
+                                                                <Core:CallMethodAction
+                                                                    TargetObject="{Binding Mode=OneWay}"
+                                                                    MethodName="SwitchOnShuffleMode" />
+                                                            </Core:EventTriggerBehavior>
+                                                            <Core:EventTriggerBehavior EventName="Unchecked">
+                                                                <Core:CallMethodAction
+                                                                    TargetObject="{Binding Mode=OneWay}"
+                                                                    MethodName="SwitchOffShuffleMode" />
+                                                            </Core:EventTriggerBehavior>
+                                                        </Interactivity:Interaction.Behaviors>
+                                                        <SymbolIcon Symbol="Shuffle" />
+                                                    </ToggleButton>
+                                                    <Button DataContext="{StaticResource MainVM}"
+                                                            Style="{StaticResource PlaybackButtonStyle}"
+                                                            HorizontalAlignment="Center">
+                                                        <SymbolIcon Symbol="MusicInfo" />
+                                                        <Interactivity:Interaction.Behaviors>
+                                                            <Core:EventTriggerBehavior EventName="Click">
+                                                                <Core:CallMethodAction
+                                                                    TargetObject="{Binding Mode=OneWay}"
+                                                                    MethodName="PlaybackButtonClick" />
+                                                            </Core:EventTriggerBehavior>
+                                                        </Interactivity:Interaction.Behaviors>
+                                                    </Button>
+                                                </StackPanel>
+                                                <Flyout.FlyoutPresenterStyle>
+                                                    <Style TargetType="FlyoutPresenter">
+                                                        <Setter Property="Background" Value="Black" />
+                                                        <Setter Property="BorderBrush" Value="Orange" />
+                                                        <Setter Property="MinWidth" Value="0" />
+                                                        <Setter Property="Width" Value="50" />
+                                                    </Style>
+                                                </Flyout.FlyoutPresenterStyle>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="WidePlaybackPanel">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="5,0">
+                                        <Image Source="ms-appx:///Assets/cover.png" />
+                                        <Image Source="{Binding CurrentTrack.Cover.Uri}" Canvas.ZIndex="1" />
+                                    </Grid>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding CurrentTrack.Name}"
+                                                   Style="{StaticResource OrangeItemTitleTextBlockStyle}" />
+                                        <TextBlock Text="{Binding CurrentTrack.Artist}"
+                                                   Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="1" Margin="5,0" VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Slider
+                                        Grid.ColumnSpan="2"
+                                        Maximum="{Binding CurrentTrackDuration}"
+                                        Value="{Binding CurrentTrackPosition, Mode=TwoWay}"
+                                        IsThumbToolTipEnabled="False"
+                                        Style="{StaticResource OrangeSliderStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="PointerCaptureLost">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlaybackSlider_PointerCaptureLost" />
+                                            </Core:EventTriggerBehavior>
+                                            <Core:EventTriggerBehavior EventName="PointerEntered">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlaybackSlider_PointerEntered" />
+                                            </Core:EventTriggerBehavior>
+                                            <Core:EventTriggerBehavior EventName="PointerExited">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlaybackSlider_PointerExited" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                    </Slider>
+                                    <TextBlock Grid.Row="1" Text="{Binding PlayedDuration}"
+                                               Style="{StaticResource OrangeCaptionTextBlockStyle}" />
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding RemainingDuration}"
+                                               Style="{StaticResource OrangeCaptionTextBlockStyle}"
+                                               HorizontalAlignment="Right" />
+                                </Grid>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlayPrevious" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="Previous" />
+                                    </Button>
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="Play" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="{Binding PlayButtonIcon}" />
+                                    </Button>
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlayNext" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="Next" />
+                                    </Button>
+                                    <Line Y1="40" Stroke="Orange" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" Margin="5,0" />
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon x:Name="VolumeButtonIcon" Symbol="Volume" />
+                                        <Button.Flyout>
+                                            <Flyout Opening="Flyout_Opening">
+                                                <Slider
+                                                    x:Name="VolumeSlider"
+                                                    Height="150"
+                                                    Style="{StaticResource OrangeSliderStyle}"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Vertical"
+                                                    ValueChanged="VolumeSlider_ValueChanged" />
+                                                <Flyout.FlyoutPresenterStyle>
+                                                    <Style TargetType="FlyoutPresenter">
+                                                        <Setter Property="Background" Value="Black" />
+                                                        <Setter Property="BorderBrush" Value="Orange" />
+                                                        <Setter Property="MinWidth" Value="50" />
+                                                        <Setter Property="Width" Value="50" />
+                                                    </Style>
+                                                </Flyout.FlyoutPresenterStyle>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <Line Y1="40" Stroke="Orange" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" Margin="5,0" />
+                                    <ToggleButton Background="Transparent"
+                                                  Style="{StaticResource PlaybackToggleButtonStyle}"
+                                                  IsChecked="{Binding IsRepeating, Mode=TwoWay}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Checked">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="SwitchOnRepeatingMode" />
+                                            </Core:EventTriggerBehavior>
+                                            <Core:EventTriggerBehavior EventName="Unchecked">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="SwitchOffRepeatingMode" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="RepeatAll" />
+                                    </ToggleButton>
+                                    <ToggleButton Background="Transparent"
+                                                  Style="{StaticResource PlaybackToggleButtonStyle}"
+                                                  IsChecked="{Binding IsShuffling, Mode=TwoWay}">
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Checked">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="SwitchOnShuffleMode" />
+                                            </Core:EventTriggerBehavior>
+                                            <Core:EventTriggerBehavior EventName="Unchecked">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="SwitchOffShuffleMode" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                        <SymbolIcon Symbol="Shuffle" />
+                                    </ToggleButton>
+                                    <Button DataContext="{StaticResource MainVM}"
+                                            Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="MusicInfo" />
+                                        <Interactivity:Interaction.Behaviors>
+                                            <Core:EventTriggerBehavior EventName="Click">
+                                                <Core:CallMethodAction TargetObject="{Binding Mode=OneWay}"
+                                                                       MethodName="PlaybackButtonClick" />
+                                            </Core:EventTriggerBehavior>
+                                        </Interactivity:Interaction.Behaviors>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </UserControl>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
+</Page>
