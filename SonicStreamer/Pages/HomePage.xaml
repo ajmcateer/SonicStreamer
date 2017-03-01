@@ -86,6 +86,7 @@
                 <DataTemplate>
                     <UserControl>
                         <GridView
+                            x:Name="RandomAlbumsGridView"
                             ItemClick="ItemView_ItemClick"
                             ItemsSource="{Binding RandomAlbums}"
                             Style="{StaticResource SectionGridViewStyle}">
@@ -120,6 +121,7 @@
                 <DataTemplate>
                     <UserControl>
                         <GridView
+                            x:Name="RecentAlbumsGridView"
                             ItemClick="ItemView_ItemClick"
                             ItemsSource="{Binding RecentAlbums}"
                             Style="{StaticResource SectionGridViewStyle}">
@@ -154,6 +156,7 @@
                 <DataTemplate>
                     <UserControl>
                         <GridView
+                            x:Name="FrequentAlbumsGridView"
                             ItemClick="ItemView_ItemClick"
                             ItemsSource="{Binding FrequentAlbums}"
                             Style="{StaticResource SectionGridViewStyle}">
@@ -188,6 +191,7 @@
                 <DataTemplate>
                     <UserControl>
                         <GridView
+                            x:Name="NewestAlbumsGridView"
                             ItemClick="ItemView_ItemClick"
                             ItemsSource="{Binding NewestAlbums}"
                             Style="{StaticResource SectionGridViewStyle}">
@@ -198,7 +202,7 @@
                                             <AdaptiveTrigger MinWindowWidth="0" />
                                         </VisualState.StateTriggers>
                                         <VisualState.Setters>
-                                            <Setter Target="FrequentAlbumsGridView.ItemsPanel" Value="{StaticResource HorizontalItemsPanel}" />
+                                            <Setter Target="NewestAlbumsGridView.ItemsPanel" Value="{StaticResource HorizontalItemsPanel}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState>
@@ -206,7 +210,7 @@
                                             <AdaptiveTrigger MinWindowWidth="500" />
                                         </VisualState.StateTriggers>
                                         <VisualState.Setters>
-                                            <Setter Target="FrequentAlbumsGridView.ItemsPanel" Value="{StaticResource VerticalItemsPanel}" />
+                                            <Setter Target="NewestAlbumsGridView.ItemsPanel" Value="{StaticResource VerticalItemsPanel}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
