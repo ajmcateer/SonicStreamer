@@ -4,6 +4,7 @@
 * [Changed]: Modified and extended views with artist info
 * [Fixed]: Data loss while getting metadata of current track in playback
 * [Fixed]: Page title on detailed album view
+* [Fixed]: Newest album ordering on HomePage for mobile devices
 
 ### 2.3 Build 6239 (2017-01-30)
 
