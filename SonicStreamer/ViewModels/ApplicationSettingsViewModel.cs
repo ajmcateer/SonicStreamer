@@ -1,8 +1,13 @@
 ﻿using SonicStreamer.Common.System;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Input;
+using NUnit.Framework.Constraints;
 
 namespace SonicStreamer.ViewModels
 {
@@ -43,18 +48,57 @@ namespace SonicStreamer.ViewModels
             set { Set(ref _version, value); }
         }
 
+        private string _trackCacheSize;
+
+        public string TrackCacheSize
+        {
+            get { return _trackCacheSize; }
+            set { Set(ref _trackCacheSize, value); }
+        }
+
         private const string Homepage = "http://axelander.net";
         private const string Mail = "mailto:sonicstreamer@outlook.com";
         private const string Twitter = "http://twitter.com/SonicStreamer";
         private const string Policy = "http://axelander.net/?page_id=41";
 
-        public ApplicationSettingsViewModel()
+        public async Task LoadDataAsync()
         {
             var packageVersion = Windows.ApplicationModel.Package.Current.Id.Version;
             Version = string.Format("{0}.{1} (Build {2})", packageVersion.Major.ToString(),
                 packageVersion.Minor.ToString(), packageVersion.Build.ToString());
 
             RestoreData();
+            await GetTrackCacheSize();
+        }
+
+        private async Task GetTrackCacheSize()
+        {
+            try
+            {
+                var trackFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("tracks");
+                var folderSize = await GetFolderSizeAsync(trackFolder);
+                TrackCacheSize = (ConvertBytesToMegabytes(folderSize)).ToString("#.000");
+            }
+            catch
+            {
+                TrackCacheSize = "0";
+            }
+
+            // Local function to get sizes for all files in all subfolders (Recursion)
+            async Task<ulong> GetFolderSizeAsync(IStorageFolder folder)
+            {
+                var fileSizeTasks =
+                    (await folder.GetFilesAsync()).Select(async file => (await file.GetBasicPropertiesAsync()).Size);
+                var sizes = await Task.WhenAll(fileSizeTasks);
+                var folderSize = sizes.Aggregate<ulong, ulong>(0, (current, size) => current + size);
+                var tasks =
+                    (from subfolder in await folder.GetFoldersAsync() select GetFolderSizeAsync(subfolder)).ToList();
+                folderSize = (await Task.WhenAll(tasks)).Aggregate(folderSize,
+                    (current, subFolderSize) => current + subFolderSize);
+                return folderSize;
+            }
+
+            double ConvertBytesToMegabytes(ulong bytes) => (bytes / 1024f) / 1024f;
         }
 
         /// <summary>
@@ -115,6 +159,7 @@ namespace SonicStreamer.ViewModels
             {
                 var trackFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("tracks");
                 await trackFolder.DeleteAsync();
+                TrackCacheSize = "0";
             }
             catch (Exception)
             {

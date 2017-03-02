@@ -107,13 +107,22 @@
                     </StackPanel.Resources>
                     <ToggleSwitch Header="Clear Selection after each Action" IsOn="{Binding IsSelectionCleared, Mode=TwoWay}" />
                     <ToggleSwitch Header="Scrobble music on last.fm" IsOn="{Binding IsScrobbleActivated, Mode=TwoWay}" />
-                    <Button Content="Clear Track Cache">
-                        <interactivity:Interaction.Behaviors>
-                            <core:EventTriggerBehavior EventName="Click">
-                                <core:CallMethodAction MethodName="ClearTrackCacheClick" TargetObject="{Binding Mode=OneWay}" />
-                            </core:EventTriggerBehavior>
-                        </interactivity:Interaction.Behaviors>
-                    </Button>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Clear Track Cache">
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Click">
+                                    <core:CallMethodAction MethodName="ClearTrackCacheClick" TargetObject="{Binding Mode=OneWay}" />
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </Button>
+                        <TextBlock
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource OrangeBaseTextBlockStyle}">
+                            <Run Text="{Binding TrackCacheSize}" />
+                            <Run Text="MB used" />
+                        </TextBlock>
+                    </StackPanel>
                 </StackPanel>
             </PivotItem>
         </Pivot>
