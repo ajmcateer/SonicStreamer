@@ -358,12 +358,12 @@ namespace SonicStreamer.ViewModels
         public async void PlayAlbumClick(object sender, RoutedEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            if (element?.DataContext is ListingItem)
+            if (element?.DataContext is TrackListingItem)
             {
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                     "PlayAlbumClick"));
-                var listingItem = element.DataContext as ListingItem;
-                await PlaybackService.Current.AddToPlaybackAsync(await listingItem.GetTracksAsync());
+                var trackListingItem = (TrackListingItem) element.DataContext;
+                await PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks);
             }
         }
 
@@ -387,12 +387,12 @@ namespace SonicStreamer.ViewModels
         public async void AddAlbumClick(object sender, RoutedEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            if (element?.DataContext is ListingItem)
+            if (element?.DataContext is TrackListingItem)
             {
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                     "AddAlbumClick"));
-                var listingItem = element.DataContext as ListingItem;
-                await PlaybackService.Current.AddToPlaybackAsync(await listingItem.GetTracksAsync(), false);
+                var trackListingItem = (TrackListingItem) element.DataContext;
+                await PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks, false);
             }
         }
 
