@@ -146,7 +146,7 @@ namespace SonicStreamer.Subsonic.Data
             }
         }
         
-        private readonly IDispatcherWrapper _dispatcherWrapper;
+        private IDispatcherWrapper _dispatcherWrapper;
 
         public SubsonicPlayableObject()
         {
@@ -200,15 +200,18 @@ namespace SonicStreamer.Subsonic.Data
             {
                 _dispatcherWrapper = new DispatcherWrapper(CoreApplication.MainView.CoreWindow.Dispatcher);
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 _dispatcherWrapper = new FakeDispatcherWrapper();
             }
-            var startResult = _dispatcherWrapper.RunAsync(CoreDispatcherPriority.Normal,
-                async () =>
-                {
-                    Status = await IsLocalFileAvailable() ? PlayableObjectStatus.Offline : PlayableObjectStatus.Online;
-                });
+            var startResult =
+                _dispatcherWrapper.RunAsync(
+                    async () =>
+                    {
+                        Status = await IsLocalFileAvailable()
+                            ? PlayableObjectStatus.Offline
+                            : PlayableObjectStatus.Online;
+                    });
         }
 
         /// <summary>
