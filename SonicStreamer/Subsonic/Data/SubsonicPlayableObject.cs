@@ -144,6 +144,8 @@ namespace SonicStreamer.Subsonic.Data
                 }
             }
         }
+        
+        private readonly IDispatcherWrapper _dispatcherWrapper;
 
         public SubsonicPlayableObject()
         {
@@ -193,7 +195,15 @@ namespace SonicStreamer.Subsonic.Data
         /// </summary>
         public void CheckLocalFile()
         {
-            var startResult = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            try
+            {
+                _dispatcherWrapper = new DispatcherWrapper(CoreApplication.MainView.CoreWindow.Dispatcher);
+            }
+            catch (Exception)
+            {
+                _dispatcherWrapper = new FakeDispatcherWrapper();
+            }
+            var startResult = _dispatcherWrapper.RunAsync(CoreDispatcherPriority.Normal,
                 async () =>
                 {
                     Status = await IsLocalFileAvailable() ? PlayableObjectStatus.Offline : PlayableObjectStatus.Online;
