@@ -8,6 +8,7 @@ using Windows.Media.Playback;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.UI.Core;
+using SonicStreamer.Common.Extension;
 
 namespace SonicStreamer.Subsonic.Data
 {
