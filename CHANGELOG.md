@@ -1,10 +1,12 @@
 ### 2.4 Build xxxx (2017-xx-xx)
 
 * [New]: MusicBrainz Support
+* [New]: Settings Page shows now the size of the local track cache
 * [Changed]: Modified and extended views with artist info
 * [Fixed]: Data loss while getting metadata of current track in playback
 * [Fixed]: Page title on detailed album view
 * [Fixed]: Newest album ordering on HomePage for mobile devices
+* [Fixed]: Missing Cover in System Media Transport Controls (SMTC)
 
 ### 2.3 Build 6239 (2017-01-30)
 
