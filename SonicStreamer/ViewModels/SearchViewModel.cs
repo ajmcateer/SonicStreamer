@@ -430,6 +430,26 @@ namespace SonicStreamer.ViewModels
 
         #endregion
 
+        #region Playlist Handling
+
+        /// <summary>
+        /// Fügt anhand der Auswahl die Tracks zu einer Playlist hinzu
+        /// </summary>
+        public async Task AddToPlaylistAsync()
+        {
+            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
+                "AddToPlaylistAsync"));
+            var playlistVm = new PlaylistViewModel();
+            ResourceLoader.Current.GetResource(ref playlistVm, Constants.ViewModelPlaylist);
+            await playlistVm.AddTracksToPlaylistAsync(await GetTracksAsync());
+            if (SettingsVm.IsSelectionCleared)
+            {
+                SelectionMode = ListViewSelectionMode.None;
+            }
+        }
+
+        #endregion
+
         #region CommandBar Methods
 
         /// <summary>
@@ -468,22 +488,6 @@ namespace SonicStreamer.ViewModels
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name, "AddClick"));
             await AddSelectionAsync();
-            if (SettingsVm.IsSelectionCleared)
-            {
-                SelectionMode = ListViewSelectionMode.None;
-            }
-        }
-
-        /// <summary>
-        /// Bindable Methode um Tracks zu einer Playlist hinzuzufügen
-        /// </summary>
-        public async void AddToPlaylistClick()
-        {
-            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
-                "AddToPlaylistClick"));
-            var playlistVm = new PlaylistViewModel();
-            ResourceLoader.Current.GetResource(ref playlistVm, Constants.ViewModelPlaylist);
-            await playlistVm.AddTracksToPlaylistAsync(await GetTracksAsync());
             if (SettingsVm.IsSelectionCleared)
             {
                 SelectionMode = ListViewSelectionMode.None;

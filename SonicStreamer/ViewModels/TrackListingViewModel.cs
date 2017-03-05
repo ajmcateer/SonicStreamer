@@ -312,6 +312,26 @@ namespace SonicStreamer.ViewModels
 
         #endregion
 
+        #region Playlist Handling
+
+        /// <summary>
+        /// Bindable Methode um Tracks zu einer Playlist hinzuzufügen
+        /// </summary>
+        public async Task AddToPlaylistAsync()
+        {
+            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
+                "AddToPlaylistAsync"));
+            var playlistVm = Application.Current.Resources[Constants.ViewModelPlaylist] as PlaylistViewModel;
+            await playlistVm?.AddTracksToPlaylistAsync(GetSelection());
+            if (SettingsVm.IsSelectionCleared)
+            {
+                ClearSelection();
+                IsBottomAppBarVisible = false;
+            }
+        }
+
+        #endregion
+
         #region CommandBar Methods
 
         /// <summary>
@@ -393,22 +413,6 @@ namespace SonicStreamer.ViewModels
                     "AddAlbumClick"));
                 var trackListingItem = (TrackListingItem) element.DataContext;
                 await PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks, false);
-            }
-        }
-
-        /// <summary>
-        /// Bindable Methode um Tracks zu einer Playlist hinzuzufügen
-        /// </summary>
-        public async void AddToPlaylistClick()
-        {
-            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
-                "AddToPlaylistClick"));
-            var playlistVm = Application.Current.Resources[Constants.ViewModelPlaylist] as PlaylistViewModel;
-            await playlistVm?.AddTracksToPlaylistAsync(GetSelection());
-            if (SettingsVm.IsSelectionCleared)
-            {
-                ClearSelection();
-                IsBottomAppBarVisible = false;
             }
         }
 

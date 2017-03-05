@@ -43,46 +43,10 @@
                 Click="{x:Bind AlbumVm.AddClick}"
                 Icon="Add"
                 Label="Add to Playback" />
-            <AppBarButton Icon="Favorite" Label="Add to Playlist">
-                <AppBarButton.Flyout>
-                    <Flyout
-                        x:Name="PlaylistFlyout"
-                        Closed="PlaylistFlyout_Closed"
-                        Opening="PlaylistFlyout_Opening">
-                        <StackPanel MinWidth="250" DataContext="{StaticResource PlaylistVM}">
-                            <ComboBox
-                                Margin="0,0,0,5"
-                                HorizontalAlignment="Stretch"
-                                ItemsSource="{Binding AvailablePlaylists}"
-                                PlaceholderText="Select a playlist"
-                                SelectedItem="{Binding SelectedAddToPlaylist, Mode=TwoWay}"
-                                SelectionChanged="{x:Bind PlaylistVm.AddToPlaylistComboBox_SelectionChanged}"
-                                Style="{StaticResource OrangeComboBoxStyle}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                                <ComboBox.ItemContainerStyle>
-                                    <Style BasedOn="{StaticResource OrangeComboBoxItemStyle}" TargetType="ComboBoxItem" />
-                                </ComboBox.ItemContainerStyle>
-                            </ComboBox>
-                            <TextBox
-                                Margin="0,0,0,5"
-                                PlaceholderText="New Playlist Name"
-                                Style="{StaticResource OrangeTextBoxStyle}"
-                                Text="{Binding NewPlaylistName, Mode=TwoWay}"
-                                Visibility="{Binding IsNewPlaylistTextBoxVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            <Button
-                                HorizontalAlignment="Center"
-                                Click="{x:Bind AlbumVm.AddToPlaylistClick}"
-                                Content="Add to Playlist"
-                                IsEnabled="{Binding IsAddToPlaylistButtonEnabled}"
-                                Style="{StaticResource OrangeButtonStyle}" />
-                        </StackPanel>
-                    </Flyout>
-                </AppBarButton.Flyout>
-            </AppBarButton>
+            <AppBarButton
+                Click="AddToPlaylist_Click"
+                Icon="Favorite"
+                Label="Add to Playlist" />
             <AppBarButton
                 Click="{x:Bind AlbumVm.DownloadTracksClick}"
                 Icon="Download"
@@ -95,7 +59,14 @@
             <RowDefinition Height="48" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid>
+        <ContentDialog
+            x:Name="AddToPlaylistDialog"
+            IsPrimaryButtonEnabled="True"
+            IsSecondaryButtonEnabled="True"
+            Opened="AddToPlaylistDialog_OnOpened"
+            PrimaryButtonText="Add To Playlist"
+            SecondaryButtonText="Cancel" />
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />

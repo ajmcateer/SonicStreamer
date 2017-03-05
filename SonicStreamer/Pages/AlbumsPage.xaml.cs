@@ -1,8 +1,10 @@
-﻿using SonicStreamer.Common.System;
+﻿using System;
+using SonicStreamer.Common.System;
 using SonicStreamer.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using SonicStreamer.Controls;
 
 namespace SonicStreamer.Pages
 {
@@ -39,19 +41,21 @@ namespace SonicStreamer.Pages
             Frame.Navigate(typeof(TrackListingPage), e.ClickedItem);
         }
 
-        private async void PlaylistFlyout_Opening(object sender, object e)
+        private async void AddToPlaylist_Click(object sender, RoutedEventArgs e)
         {
-            await PlaylistVm.LoadFlyoutDataAsync();
+            AddToPlaylistDialog.Content = new AddToPlaylistDialog(); 
+
+            var dialogResult = await AddToPlaylistDialog.ShowAsync();
+            if (dialogResult == ContentDialogResult.Primary)
+            {
+                await AlbumVm.AddToPlaylistAsync();
+            }
+            PlaylistVm.ResetDialogInputs();
         }
 
-        private void PlaylistFlyout_Closed(object sender, object e)
+        private async void AddToPlaylistDialog_OnOpened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
-            PlaylistVm.ResetFlyoutInputs();
-        }
-
-        private void AddToPlayback_Click(object sender, RoutedEventArgs e)
-        {
-            PlaylistFlyout.Hide();
+            await PlaylistVm.LoadDialogDataAsync();
         }
     }
 }
