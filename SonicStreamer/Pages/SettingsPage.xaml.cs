@@ -7,21 +7,24 @@ namespace SonicStreamer.Pages
 {
     public sealed partial class SettingsPage : Page
     {
-        private readonly ApplicationSettingsViewModel _settingsVm;
+        public readonly ApplicationSettingsViewModel SettingsVm;
+        public readonly MainViewModel MainVm;
 
         public SettingsPage()
         {
             InitializeComponent();
 
-            if (ResourceLoader.Current.GetResource(ref _settingsVm, Constants.ViewModelApplicationSettings) == false)
-                _settingsVm = new ApplicationSettingsViewModel();
+            if (ResourceLoader.Current.GetResource(ref SettingsVm, Constants.ViewModelApplicationSettings) == false)
+                SettingsVm = new ApplicationSettingsViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackPageView(GetType().Name);
 
-            await _settingsVm.LoadDataAsync();
+            await SettingsVm.LoadDataAsync();
         }
     }
 }

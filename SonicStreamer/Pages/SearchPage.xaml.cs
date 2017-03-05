@@ -8,17 +8,20 @@ namespace SonicStreamer.Pages
 {
     public sealed partial class SearchPage : Page
     {
-        private readonly SearchViewModel _searchVm;
-        private readonly PlaylistViewModel _playlistVm;
+        public readonly SearchViewModel SearchVm;
+        public readonly PlaylistViewModel PlaylistVm;
+        public readonly MainViewModel MainVm;
 
         public SearchPage()
         {
             InitializeComponent();
 
-            if (ResourceLoader.Current.GetResource(ref _searchVm, Constants.ViewModelSearch) == false)
-                _searchVm = new SearchViewModel();
-            if (ResourceLoader.Current.GetResource(ref _playlistVm, Constants.ViewModelPlaylist) == false)
-                _playlistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref SearchVm, Constants.ViewModelSearch) == false)
+                SearchVm = new SearchViewModel();
+            if (ResourceLoader.Current.GetResource(ref PlaylistVm, Constants.ViewModelPlaylist) == false)
+                PlaylistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -33,12 +36,12 @@ namespace SonicStreamer.Pages
 
         private async void PlaylistFlyout_Opening(object sender, object e)
         {
-            await _playlistVm.LoadFlyoutDataAsync();
+            await PlaylistVm.LoadFlyoutDataAsync();
         }
 
         private void PlaylistFlyout_Closed(object sender, object e)
         {
-            _playlistVm.ResetFlyoutInputs();
+            PlaylistVm.ResetFlyoutInputs();
         }
 
         private void AddToPlayback_Click(object sender, RoutedEventArgs e)

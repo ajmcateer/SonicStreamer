@@ -8,20 +8,23 @@ namespace SonicStreamer.Pages
 {
     public sealed partial class PlaylistPage : Page
     {
-        private readonly PlaylistViewModel _playlistVm;
+        public readonly PlaylistViewModel PlaylistVm;
+        public readonly MainViewModel MainVm;
 
         public PlaylistPage()
         {
             InitializeComponent();
 
-            if (ResourceLoader.Current.GetResource(ref _playlistVm, Constants.ViewModelPlaylist) == false)
-                _playlistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref PlaylistVm, Constants.ViewModelPlaylist) == false)
+                PlaylistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackPageView(GetType().Name);
-            await _playlistVm.LoadDataAsync();
+            await PlaylistVm.LoadDataAsync();
         }
 
         private void RenamePopupOpened(object sender, object e)

@@ -36,20 +36,14 @@
             <CommandBar.Resources>
                 <Style BasedOn="{StaticResource OrangeAppBarButtonStyle}" TargetType="AppBarButton" />
             </CommandBar.Resources>
-            <AppBarButton Icon="Play" Label="Play Selection">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Click">
-                        <core:CallMethodAction MethodName="PlayClick" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </AppBarButton>
-            <AppBarButton Icon="Add" Label="Add to Playback">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Click">
-                        <core:CallMethodAction MethodName="AddClick" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </AppBarButton>
+            <AppBarButton
+                Click="{x:Bind TrackListingVm.PlayClick}"
+                Icon="Play"
+                Label="Play Selection" />
+            <AppBarButton
+                Click="{x:Bind TrackListingVm.AddClick}"
+                Icon="Add"
+                Label="Add to Playback" />
             <AppBarButton Icon="Favorite" Label="Add to Playlist">
                 <AppBarButton.Flyout>
                     <Flyout
@@ -63,6 +57,7 @@
                                 ItemsSource="{Binding AvailablePlaylists}"
                                 PlaceholderText="Select a playlist"
                                 SelectedItem="{Binding SelectedAddToPlaylist, Mode=TwoWay}"
+                                SelectionChanged="{x:Bind PlaylistVm.AddToPlaylistComboBox_SelectionChanged}"
                                 Style="{StaticResource OrangeComboBoxStyle}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
@@ -72,11 +67,6 @@
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource OrangeComboBoxItemStyle}" TargetType="ComboBoxItem" />
                                 </ComboBox.ItemContainerStyle>
-                                <interactivity:Interaction.Behaviors>
-                                    <core:EventTriggerBehavior EventName="SelectionChanged">
-                                        <core:CallMethodAction MethodName="AddToPlaylistComboBox_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
-                                    </core:EventTriggerBehavior>
-                                </interactivity:Interaction.Behaviors>
                             </ComboBox>
                             <TextBox
                                 Margin="0,0,0,5"
@@ -86,27 +76,18 @@
                                 Visibility="{Binding IsNewPlaylistTextBoxVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             <Button
                                 HorizontalAlignment="Center"
-                                Click="AddToPlayback_Click"
+                                Click="{x:Bind TrackListingVm.AddToPlaylistClick}"
                                 Content="Add to Playlist"
                                 IsEnabled="{Binding IsAddToPlaylistButtonEnabled}"
-                                Style="{StaticResource OrangeButtonStyle}">
-                                <interactivity:Interaction.Behaviors>
-                                    <core:EventTriggerBehavior EventName="Click">
-                                        <core:CallMethodAction MethodName="AddToPlaylistClick" TargetObject="{StaticResource TrackListingVM}" />
-                                    </core:EventTriggerBehavior>
-                                </interactivity:Interaction.Behaviors>
-                            </Button>
+                                Style="{StaticResource OrangeButtonStyle}" />
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarButton Icon="Download" Label="Download">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Click">
-                        <core:CallMethodAction MethodName="DownloadTracksClick" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </AppBarButton>
+            <AppBarButton
+                Click="{x:Bind TrackListingVm.DownloadTracksClick}"
+                Icon="Download"
+                Label="Download" />
         </CommandBar>
     </Page.BottomAppBar>
 
@@ -126,14 +107,9 @@
             <StackPanel Orientation="Horizontal">
                 <RadioButton
                     x:Name="HamburgerButton"
+                    Click="{x:Bind MainVm.HamburgerButtonClick}"
                     DataContext="{StaticResource MainVM}"
-                    Style="{StaticResource SplitViewHamburgerButtonStyle}">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="HamburgerButtonClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </RadioButton>
+                    Style="{StaticResource SplitViewHamburgerButtonStyle}" />
                 <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="{Binding PageTitle}" />
             </StackPanel>
         </Grid>
@@ -254,13 +230,8 @@
                     ItemContainerStyle="{StaticResource ListViewItemStyle}"
                     ItemTemplate="{StaticResource TrackListItemTemplate}"
                     ItemsSource="{Binding TopSongs}"
-                    SelectionMode="{Binding TopSongsSelectionMode, Source={StaticResource TrackListingVM}}">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="SelectionChanged">
-                            <core:CallMethodAction MethodName="TopSongs_SelectionChanged" TargetObject="{Binding Source={StaticResource TrackListingVM}}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </ListView>
+                    SelectionChanged="{x:Bind TrackListingVm.TopSongs_SelectionChanged}"
+                    SelectionMode="{Binding TopSongsSelectionMode, Source={StaticResource TrackListingVM}}" />
             </PivotItem>
             <PivotItem Header="artist info">
                 <controls:ArtistInfoView DataContext="{Binding ArtistInfo}" />

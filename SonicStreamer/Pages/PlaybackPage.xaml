@@ -40,14 +40,9 @@
             <StackPanel Orientation="Horizontal">
                 <RadioButton
                     x:Name="HamburgerButton"
+                    Click="{x:Bind MainVm.HamburgerButtonClick}"
                     DataContext="{StaticResource MainVM}"
-                    Style="{StaticResource SplitViewHamburgerButtonStyle}">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="HamburgerButtonClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </RadioButton>
+                    Style="{StaticResource SplitViewHamburgerButtonStyle}" />
                 <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="playback" />
             </StackPanel>
         </Grid>
@@ -56,6 +51,7 @@
                 <ListView
                     MaxWidth="800"
                     IsItemClickEnabled="True"
+                    ItemClick="{x:Bind PlaybackVm.PlaybackTracks_ItemClick}"
                     ItemsSource="{Binding Tracks}"
                     SelectedItem="{Binding CurrentTrack, Mode=TwoWay}"
                     SelectionChanged="PlaybackTracks_SelectionChanged">
@@ -105,11 +101,6 @@
                     <ListView.ItemContainerStyle>
                         <Style BasedOn="{StaticResource ListViewItemStyle}" TargetType="ListViewItem" />
                     </ListView.ItemContainerStyle>
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="ItemClick">
-                            <core:CallMethodAction MethodName="PlaybackTracks_ItemClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
                 </ListView>
             </PivotItem>
             <PivotItem Header="artist info">

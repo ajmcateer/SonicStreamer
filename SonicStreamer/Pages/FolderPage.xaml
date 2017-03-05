@@ -65,6 +65,7 @@
                                 ItemsSource="{Binding AvailablePlaylists}"
                                 PlaceholderText="Select a playlist"
                                 SelectedItem="{Binding SelectedAddToPlaylist, Mode=TwoWay}"
+                                SelectionChanged="{x:Bind PlaylistVm.AddToPlaylistComboBox_SelectionChanged}"
                                 Style="{StaticResource OrangeComboBoxStyle}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
@@ -74,11 +75,6 @@
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource OrangeComboBoxItemStyle}" TargetType="ComboBoxItem" />
                                 </ComboBox.ItemContainerStyle>
-                                <interactivity:Interaction.Behaviors>
-                                    <core:EventTriggerBehavior EventName="SelectionChanged">
-                                        <core:CallMethodAction MethodName="AddToPlaylistComboBox_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
-                                    </core:EventTriggerBehavior>
-                                </interactivity:Interaction.Behaviors>
                             </ComboBox>
                             <TextBox
                                 Margin="0,0,0,5"
@@ -88,16 +84,10 @@
                                 Visibility="{Binding IsNewPlaylistTextBoxVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             <Button
                                 HorizontalAlignment="Center"
-                                Click="AddToPlayback_Click"
+                                Click="{x:Bind FolderVm.AddToPlaylistClick}"
                                 Content="Add to Playlist"
                                 IsEnabled="{Binding IsAddToPlaylistButtonEnabled}"
-                                Style="{StaticResource OrangeButtonStyle}">
-                                <interactivity:Interaction.Behaviors>
-                                    <core:EventTriggerBehavior EventName="Click">
-                                        <core:CallMethodAction MethodName="AddToPlaylistClick" TargetObject="{StaticResource FolderVM}" />
-                                    </core:EventTriggerBehavior>
-                                </interactivity:Interaction.Behaviors>
-                            </Button>
+                                Style="{StaticResource OrangeButtonStyle}" />
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
@@ -125,14 +115,9 @@
             <StackPanel Orientation="Horizontal">
                 <RadioButton
                     x:Name="HamburgerButton"
+                    Click="{x:Bind MainVm.HamburgerButtonClick}"
                     DataContext="{StaticResource MainVM}"
-                    Style="{StaticResource SplitViewHamburgerButtonStyle}">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="HamburgerButtonClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </RadioButton>
+                    Style="{StaticResource SplitViewHamburgerButtonStyle}" />
                 <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="folder" />
             </StackPanel>
             <Grid Grid.Column="1" HorizontalAlignment="Right">
@@ -151,13 +136,9 @@
                 Padding="5,0,0,0"
                 HorizontalAlignment="Left"
                 IsItemClickEnabled="True"
+                ItemClick="{x:Bind FolderVm.Folder_Click}"
                 ItemsSource="{Binding History}"
                 SelectionMode="None">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="ItemClick">
-                        <core:CallMethodAction MethodName="Folder_Click" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -194,7 +175,9 @@
                         <SemanticZoom.ZoomedInView>
                             <ListView
                                 IsItemClickEnabled="{Binding IsItemClickEnabled}"
+                                ItemClick="{x:Bind FolderVm.Folder_Click}"
                                 ItemsSource="{Binding Source={StaticResource FolderListViewSource}}"
+                                SelectionChanged="{x:Bind FolderVm.FolderItem_SelectionChanged}"
                                 SelectionMode="{Binding SelectionMode}">
                                 <ListView.GroupStyle>
                                     <GroupStyle HeaderTemplate="{StaticResource ListingGroupHeaderStyle}" />
@@ -239,14 +222,6 @@
                                         <ItemsWrapGrid Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
-                                <interactivity:Interaction.Behaviors>
-                                    <core:EventTriggerBehavior EventName="ItemClick">
-                                        <core:CallMethodAction MethodName="Folder_Click" TargetObject="{Binding Mode=OneWay}" />
-                                    </core:EventTriggerBehavior>
-                                    <core:EventTriggerBehavior EventName="SelectionChanged">
-                                        <core:CallMethodAction MethodName="FolderItem_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
-                                    </core:EventTriggerBehavior>
-                                </interactivity:Interaction.Behaviors>
                             </ListView>
                         </SemanticZoom.ZoomedInView>
                     </SemanticZoom>
@@ -257,17 +232,13 @@
                         IsMultiSelectCheckBoxEnabled="False"
                         ItemTemplate="{StaticResource TrackListItemTemplate}"
                         ItemsSource="{Binding Current.Tracks}"
+                        SelectionChanged="{x:Bind FolderVm.FolderItem_SelectionChanged}"
                         SelectionMode="{Binding TracksSelectionMode}">
                         <ListView.ItemContainerStyle>
                             <Style BasedOn="{StaticResource ListViewItemStyle}" TargetType="ListViewItem">
                                 <Setter Property="Margin" Value="0,0,10,0" />
                             </Style>
                         </ListView.ItemContainerStyle>
-                        <interactivity:Interaction.Behaviors>
-                            <core:EventTriggerBehavior EventName="SelectionChanged">
-                                <core:CallMethodAction MethodName="FolderItem_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
-                            </core:EventTriggerBehavior>
-                        </interactivity:Interaction.Behaviors>
                     </ListView>
                 </PivotItem>
             </Pivot>

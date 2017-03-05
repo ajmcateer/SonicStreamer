@@ -9,20 +9,20 @@ namespace SonicStreamer.Pages
 {
     public sealed partial class TrackListingPage : Page
     {
-        readonly TrackListingViewModel _trackListingVm;
-        readonly MainViewModel _mainVm;
-        readonly PlaylistViewModel _playlistVm;
+        public readonly TrackListingViewModel TrackListingVm;
+        public readonly MainViewModel MainVm;
+        public readonly PlaylistViewModel PlaylistVm;
 
         public TrackListingPage()
         {
             InitializeComponent();
 
-            if (ResourceLoader.Current.GetResource(ref _trackListingVm, Constants.ViewModelTrackListing) == false)
-                _trackListingVm = new TrackListingViewModel();
-            if (ResourceLoader.Current.GetResource(ref _mainVm, Constants.ViewModelMain) == false)
-                _mainVm = new MainViewModel();
-            if (ResourceLoader.Current.GetResource(ref _playlistVm, Constants.ViewModelPlaylist) == false)
-                _playlistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref TrackListingVm, Constants.ViewModelTrackListing) == false)
+                TrackListingVm = new TrackListingViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
+            if (ResourceLoader.Current.GetResource(ref PlaylistVm, Constants.ViewModelPlaylist) == false)
+                PlaylistVm = new PlaylistViewModel();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -31,18 +31,18 @@ namespace SonicStreamer.Pages
             var param = e.Parameter as SubsonicMusicObject;
             if (param != null)
             {
-                await _trackListingVm.LoadDataAsync(param);
+                await TrackListingVm.LoadDataAsync(param);
             }
         }
 
         private async void PlaylistFlyout_Opening(object sender, object e)
         {
-            await _playlistVm.LoadFlyoutDataAsync();
+            await PlaylistVm.LoadFlyoutDataAsync();
         }
 
         private void PlaylistFlyout_Closed(object sender, object e)
         {
-            _playlistVm.ResetFlyoutInputs();
+            PlaylistVm.ResetFlyoutInputs();
         }
 
         private void AddToPlayback_Click(object sender, RoutedEventArgs e)

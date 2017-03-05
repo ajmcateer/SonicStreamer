@@ -9,9 +9,9 @@ namespace SonicStreamer
 {
     public sealed partial class MainPage : Page
     {
-        readonly MainViewModel _mainVm;
-        readonly LoginViewModel _loginVm;
-        readonly PlaybackViewModel _playbackVm;
+        public readonly MainViewModel MainVm;
+        public readonly LoginViewModel LoginVm;
+        public readonly PlaybackViewModel PlaybackVm;
 
         public MainPage()
         {
@@ -20,18 +20,18 @@ namespace SonicStreamer
             Loaded += MainPage_Loaded;
             Unloaded += MainPage_Unloaded;
 
-            if (ResourceLoader.Current.GetResource(ref _mainVm, Constants.ViewModelMain) == false)
-                _mainVm = new MainViewModel();
-            if (ResourceLoader.Current.GetResource(ref _loginVm, Constants.ViewModelLogin) == false)
-                _loginVm = new LoginViewModel();
-            if (ResourceLoader.Current.GetResource(ref _playbackVm, Constants.ViewModelPlayback) == false)
-                _playbackVm = new PlaybackViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
+            if (ResourceLoader.Current.GetResource(ref LoginVm, Constants.ViewModelLogin) == false)
+                LoginVm = new LoginViewModel();
+            if (ResourceLoader.Current.GetResource(ref PlaybackVm, Constants.ViewModelPlayback) == false)
+                PlaybackVm = new PlaybackViewModel();
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            _mainVm.LoadData();
-            await _playbackVm.LoadDataAsync();
+            MainVm.LoadData();
+            await PlaybackVm.LoadDataAsync();
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
                 AppViewBackButtonVisibility.Visible;
             SystemNavigationManager.GetForCurrentView().BackRequested += Navigation_BackRequested;
@@ -48,10 +48,10 @@ namespace SonicStreamer
         {
             var handled = e.Handled;
 
-            if (_mainVm.MainFrame.CanGoBack && !handled)
+            if (MainVm.MainFrame.CanGoBack && !handled)
             {
                 handled = true;
-                _mainVm.MainFrame.GoBack();
+                MainVm.MainFrame.GoBack();
             }
 
             e.Handled = handled;
@@ -59,7 +59,7 @@ namespace SonicStreamer
 
         private void LogoutButtonClick(object sender, RoutedEventArgs e)
         {
-            _loginVm.Logout();
+            LoginVm.Logout();
             Frame.Navigate(typeof(LoginPage), true);
         }
 
