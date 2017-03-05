@@ -61,13 +61,17 @@ namespace SonicStreamer.ViewModels
         private const string Twitter = "http://twitter.com/SonicStreamer";
         private const string Policy = "http://axelander.net/?page_id=41";
 
+        public ApplicationSettingsViewModel()
+        {
+            RestoreData();
+        }
+
         public async Task LoadDataAsync()
         {
             var packageVersion = Windows.ApplicationModel.Package.Current.Id.Version;
             Version = string.Format("{0}.{1} (Build {2})", packageVersion.Major.ToString(),
                 packageVersion.Minor.ToString(), packageVersion.Build.ToString());
 
-            RestoreData();
             await GetTrackCacheSize();
         }
 
