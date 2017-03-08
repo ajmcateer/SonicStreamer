@@ -3,9 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:SonicStreamer.Controls"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     DataContext="{StaticResource FolderVM}"
     mc:Ignorable="d">
@@ -38,31 +36,22 @@
             <CommandBar.Resources>
                 <Style BasedOn="{StaticResource OrangeAppBarButtonStyle}" TargetType="AppBarButton" />
             </CommandBar.Resources>
-            <AppBarButton Icon="Play" Label="Play Selection">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Click">
-                        <core:CallMethodAction MethodName="PlayClick" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </AppBarButton>
-            <AppBarButton Icon="Add" Label="Add to Playback">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Click">
-                        <core:CallMethodAction MethodName="AddClick" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </AppBarButton>
+            <AppBarButton
+                Click="{x:Bind FolderVm.PlayClick}"
+                Icon="Play"
+                Label="Play Selection" />
+            <AppBarButton
+                Click="{x:Bind FolderVm.AddClick}"
+                Icon="Add"
+                Label="Add to Playback" />
             <AppBarButton
                 Click="AddToPlaylist_Click"
                 Icon="Favorite"
                 Label="Add to Playlist" />
-            <AppBarButton Icon="Download" Label="Download">
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Click">
-                        <core:CallMethodAction MethodName="DownloadTracksClick" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </AppBarButton>
+            <AppBarButton
+                Click="{x:Bind FolderVm.DownloadTracksClick}"
+                Icon="Download"
+                Label="Download" />
         </CommandBar>
     </Page.BottomAppBar>
 
