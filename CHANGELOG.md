@@ -2,6 +2,7 @@
 
 * [New]: MusicBrainz Support
 * [New]: Settings Page shows now the size of the local track cache
+* [New]: Added links on Settings Page for license and gitlab repo
 * [Changed]: Modified and extended views with artist info
 * [Fixed]: Data loss while getting metadata of current track in playback
 * [Fixed]: Page title on detailed album view
