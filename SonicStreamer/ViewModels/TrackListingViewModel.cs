@@ -312,6 +312,26 @@ namespace SonicStreamer.ViewModels
 
         #endregion
 
+        #region Playlist Handling
+
+        /// <summary>
+        /// Bindable Methode um Tracks zu einer Playlist hinzuzufügen
+        /// </summary>
+        public async Task AddToPlaylistAsync()
+        {
+            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
+                "AddToPlaylistAsync"));
+            var playlistVm = Application.Current.Resources[Constants.ViewModelPlaylist] as PlaylistViewModel;
+            await playlistVm?.AddTracksToPlaylistAsync(GetSelection());
+            if (SettingsVm.IsSelectionCleared)
+            {
+                ClearSelection();
+                IsBottomAppBarVisible = false;
+            }
+        }
+
+        #endregion
+
         #region CommandBar Methods
 
         /// <summary>
@@ -358,12 +378,12 @@ namespace SonicStreamer.ViewModels
         public async void PlayAlbumClick(object sender, RoutedEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            if (element?.DataContext is ListingItem)
+            if (element?.DataContext is TrackListingItem)
             {
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                     "PlayAlbumClick"));
-                var listingItem = element.DataContext as ListingItem;
-                await PlaybackService.Current.AddToPlaybackAsync(await listingItem.GetTracksAsync());
+                var trackListingItem = (TrackListingItem) element.DataContext;
+                await PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks);
             }
         }
 
@@ -387,28 +407,12 @@ namespace SonicStreamer.ViewModels
         public async void AddAlbumClick(object sender, RoutedEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
-            if (element?.DataContext is ListingItem)
+            if (element?.DataContext is TrackListingItem)
             {
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                     "AddAlbumClick"));
-                var listingItem = element.DataContext as ListingItem;
-                await PlaybackService.Current.AddToPlaybackAsync(await listingItem.GetTracksAsync(), false);
-            }
-        }
-
-        /// <summary>
-        /// Bindable Methode um Tracks zu einer Playlist hinzuzufügen
-        /// </summary>
-        public async void AddToPlaylistClick()
-        {
-            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
-                "AddToPlaylistClick"));
-            var playlistVm = Application.Current.Resources[Constants.ViewModelPlaylist] as PlaylistViewModel;
-            await playlistVm?.AddTracksToPlaylistAsync(GetSelection());
-            if (SettingsVm.IsSelectionCleared)
-            {
-                ClearSelection();
-                IsBottomAppBarVisible = false;
+                var trackListingItem = (TrackListingItem) element.DataContext;
+                await PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks, false);
             }
         }
 

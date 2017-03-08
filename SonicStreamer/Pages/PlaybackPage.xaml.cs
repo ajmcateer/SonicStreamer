@@ -9,24 +9,27 @@ namespace SonicStreamer.Pages
 {
     public sealed partial class PlaybackPage : Page
     {
-        readonly PlaybackViewModel _playbackVm;
+        public readonly PlaybackViewModel PlaybackVm;
+        public readonly MainViewModel MainVm;
 
         public PlaybackPage()
         {
             InitializeComponent();
 
-            if (ResourceLoader.Current.GetResource(ref _playbackVm, Constants.ViewModelPlayback) == false)
-                _playbackVm = new PlaybackViewModel();
+            if (ResourceLoader.Current.GetResource(ref PlaybackVm, Constants.ViewModelPlayback) == false)
+                PlaybackVm = new PlaybackViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackPageView(GetType().Name);
 
-            if (!_playbackVm.IsSmallPlaybackEnabled) return;
+            if (!PlaybackVm.IsSmallPlaybackEnabled) return;
 
-            _playbackVm.PanelStaus = PlaybackViewModel.PlaybackPanelStatus.Page;
-            _playbackVm.IsPlaybackPanelVisible = false;
+            PlaybackVm.PanelStaus = PlaybackViewModel.PlaybackPanelStatus.Page;
+            PlaybackVm.IsPlaybackPanelVisible = false;
             var firstPivotItem = PlaybackPivot.Items.First() as PivotItem;
             if (firstPivotItem?.Header as string == "playing") return;
             var playbackView = new PivotItem
@@ -39,9 +42,9 @@ namespace SonicStreamer.Pages
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            if (!_playbackVm.IsSmallPlaybackEnabled) return;
-            _playbackVm.PanelStaus = PlaybackViewModel.PlaybackPanelStatus.Small;
-            _playbackVm.IsPlaybackPanelVisible = true;
+            if (!PlaybackVm.IsSmallPlaybackEnabled) return;
+            PlaybackVm.PanelStaus = PlaybackViewModel.PlaybackPanelStatus.Small;
+            PlaybackVm.IsPlaybackPanelVisible = true;
         }
 
         private void PlaybackTracks_SelectionChanged(object sender, SelectionChangedEventArgs e)

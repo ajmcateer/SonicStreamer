@@ -2,9 +2,7 @@
     x:Class="SonicStreamer.Pages.PodcastPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     DataContext="{StaticResource PodcastVM}"
     mc:Ignorable="d">
@@ -33,43 +31,19 @@
                 <Style BasedOn="{StaticResource OrangeAppBarButtonStyle}" TargetType="AppBarButton" />
             </CommandBar.Resources>
             <CommandBar.PrimaryCommands>
-                <AppBarButton Icon="Play" Label="Play all episodes">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="PlayPodcastClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </AppBarButton>
-                <AppBarButton Icon="Add" Label="Add all to playback">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="AddPodcastClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </AppBarButton>
+                <AppBarButton
+                    Click="{x:Bind PodcastVm.PlayPodcastClick}"
+                    Icon="Play"
+                    Label="Play all episodes" />
+                <AppBarButton
+                    Click="{x:Bind PodcastVm.AddPodcastClick}"
+                    Icon="Add"
+                    Label="Add all to playback" />
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Download all to server">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="DownloadSkippedEpisodesClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </AppBarButton>
-                <AppBarButton Label="Download all to device">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="DownloadAvailableEpisodesClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </AppBarButton>
-                <AppBarButton Label="Refresh / Check for new episodes">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="SearchforEpisodesClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </AppBarButton>
+                <AppBarButton Click="{x:Bind PodcastVm.DownloadSkippedEpisodesClick}" Label="Download all to server" />
+                <AppBarButton Click="{x:Bind PodcastVm.DownloadAvailableEpisodesClick}" Label="Download all to device" />
+                <AppBarButton Click="{x:Bind PodcastVm.SearchforEpisodesClick}" Label="Refresh / Check for new episodes" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
@@ -83,19 +57,14 @@
             <StackPanel Orientation="Horizontal">
                 <RadioButton
                     x:Name="HamburgerButton"
+                    Click="{x:Bind MainVm.HamburgerButtonClick}"
                     DataContext="{StaticResource MainVM}"
-                    Style="{StaticResource SplitViewHamburgerButtonStyle}">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="HamburgerButtonClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </RadioButton>
+                    Style="{StaticResource SplitViewHamburgerButtonStyle}" />
                 <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="podcast" />
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
-            <Pivot>
+            <Pivot SelectionChanged="{x:Bind PodcastVm.Pivot_SelectionChanged}">
                 <PivotItem Header="New Episodes">
                     <ListView
                         MaxWidth="800"
@@ -115,7 +84,8 @@
                                 HorizontalAlignment="Stretch"
                                 ItemsSource="{Binding Podcasts}"
                                 PlaceholderText="Select a podcast"
-                                SelectedItem="{Binding SelectedPodcast, Mode=TwoWay}">
+                                SelectedItem="{Binding SelectedPodcast, Mode=TwoWay}"
+                                SelectionChanged="{x:Bind PodcastVm.Podcast_SelectionChanged}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>
@@ -139,11 +109,6 @@
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource OrangeComboBoxItemStyle}" TargetType="ComboBoxItem" />
                                 </ComboBox.ItemContainerStyle>
-                                <interactivity:Interaction.Behaviors>
-                                    <core:EventTriggerBehavior EventName="SelectionChanged">
-                                        <core:CallMethodAction MethodName="Podcast_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
-                                    </core:EventTriggerBehavior>
-                                </interactivity:Interaction.Behaviors>
                             </ComboBox>
                             <TextBlock
                                 Margin="0,10"
@@ -211,11 +176,6 @@
                         </ScrollViewer>
                     </Grid>
                 </PivotItem>
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="SelectionChanged">
-                        <core:CallMethodAction MethodName="Pivot_SelectionChanged" TargetObject="{Binding Mode=OneWay}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
             </Pivot>
         </Grid>
         <VisualStateManager.VisualStateGroups>

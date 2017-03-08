@@ -560,9 +560,9 @@ namespace SonicStreamer.ViewModels
         }
 
         /// <summary>
-        /// Lädt die Daten für das AddToPlaylist-Flyout
+        /// Lädt die Daten für das AddToPlaylistAsync-Flyout
         /// </summary>
-        public async Task LoadFlyoutDataAsync()
+        public async Task LoadDialogDataAsync()
         {
             await LoadDataAsync();
             foreach (var item in Playlists)
@@ -573,9 +573,9 @@ namespace SonicStreamer.ViewModels
         }
 
         /// <summary>
-        /// Setzt alle Eingaben für das AddToPlaylist-Flyout zurück
+        /// Setzt alle Eingaben für das AddToPlaylistAsync-Flyout zurück
         /// </summary>
-        public void ResetFlyoutInputs()
+        public void ResetDialogInputs()
         {
             AvailablePlaylists.Clear();
             SelectedAddToPlaylist = null;
@@ -584,10 +584,12 @@ namespace SonicStreamer.ViewModels
         }
 
         /// <summary>
-        /// Bindable Methode um auf den Wechsel der Auswahl für die AddToPlaylist zu reagieren
+        /// Bindable Methode um auf den Wechsel der Auswahl für die AddToPlaylistAsync zu reagieren
         /// </summary>
         public void AddToPlaylistComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count <= 0) return;
+            SelectedAddToPlaylist = e.AddedItems.First() as Playlist;
             if (SelectedAddToPlaylist != null &&
                 SelectedAddToPlaylist.Id == "0" &&
                 SelectedAddToPlaylist.Name == "Create Playlist")

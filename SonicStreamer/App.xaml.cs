@@ -12,6 +12,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using SonicStreamer.Common.System;
 
 namespace SonicStreamer
 {
@@ -77,7 +78,7 @@ namespace SonicStreamer
 
                 if (previousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                    var loginVm = Current.Resources["LoginVM"] as LoginViewModel;
+                    var loginVm = Current.Resources[Constants.ViewModelLogin] as LoginViewModel;
                     if (loginVm != null)
                     {
                         loginVm.RestoreData();

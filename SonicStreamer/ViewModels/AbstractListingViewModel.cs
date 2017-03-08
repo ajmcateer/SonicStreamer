@@ -219,12 +219,12 @@ namespace SonicStreamer.ViewModels
         }
 
         /// <summary>
-        /// Bindable Methode um Tracks zu einer Playlist hinzuzufügen
+        /// Fügt anhand der Auswahl die Tracks zu einer Playlist hinzu
         /// </summary>
-        public async void AddToPlaylistClick()
+        public async Task AddToPlaylistAsync()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
-                "AddToPlaylistClick"));
+                "AddToPlaylistAsync"));
             var playlistVm = new PlaylistViewModel();
             ResourceLoader.Current.GetResource(ref playlistVm, Constants.ViewModelPlaylist);
             await playlistVm.AddTracksToPlaylistAsync(await GetTracksAsync());

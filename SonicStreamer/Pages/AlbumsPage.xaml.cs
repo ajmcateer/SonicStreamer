@@ -1,31 +1,36 @@
-﻿using SonicStreamer.Common.System;
+﻿using System;
+using SonicStreamer.Common.System;
 using SonicStreamer.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using SonicStreamer.Controls;
 
 namespace SonicStreamer.Pages
 {
     public sealed partial class AlbumsPage : Page
     {
-        readonly AlbumViewModel _albumVm;
-        readonly PlaylistViewModel _playlistVm;
+        public readonly AlbumViewModel AlbumVm;
+        public readonly PlaylistViewModel PlaylistVm;
+        public readonly MainViewModel MainVm;
 
         public AlbumsPage()
         {
             InitializeComponent();
 
-            if (ResourceLoader.Current.GetResource(ref _albumVm, Constants.ViewModelAlbum) == false)
-                _albumVm = new AlbumViewModel();
-            if (ResourceLoader.Current.GetResource(ref _playlistVm, Constants.ViewModelPlaylist) == false)
-                _playlistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref AlbumVm, Constants.ViewModelAlbum) == false)
+                AlbumVm = new AlbumViewModel();
+            if (ResourceLoader.Current.GetResource(ref PlaylistVm, Constants.ViewModelPlaylist) == false)
+                PlaylistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackPageView(GetType().Name);
-            await _albumVm.LoadDataAsync();
-            ListViewSource.Source = _albumVm.Items;
+            await AlbumVm.LoadDataAsync();
+            ListViewSource.Source = AlbumVm.Items;
             var listViewBase = SemanticZoomContainer.ZoomedOutView as ListViewBase;
             if (listViewBase != null)
                 listViewBase.ItemsSource = ListViewSource.View.CollectionGroups;
@@ -36,19 +41,21 @@ namespace SonicStreamer.Pages
             Frame.Navigate(typeof(TrackListingPage), e.ClickedItem);
         }
 
-        private async void PlaylistFlyout_Opening(object sender, object e)
+        private async void AddToPlaylist_Click(object sender, RoutedEventArgs e)
         {
-            await _playlistVm.LoadFlyoutDataAsync();
+            AddToPlaylistDialog.Content = new AddToPlaylistDialog(); 
+
+            var dialogResult = await AddToPlaylistDialog.ShowAsync();
+            if (dialogResult == ContentDialogResult.Primary)
+            {
+                await AlbumVm.AddToPlaylistAsync();
+            }
+            PlaylistVm.ResetDialogInputs();
         }
 
-        private void PlaylistFlyout_Closed(object sender, object e)
+        private async void AddToPlaylistDialog_OnOpened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
-            _playlistVm.ResetFlyoutInputs();
-        }
-
-        private void AddToPlayback_Click(object sender, RoutedEventArgs e)
-        {
-            PlaylistFlyout.Hide();
+            await PlaylistVm.LoadDialogDataAsync();
         }
     }
 }

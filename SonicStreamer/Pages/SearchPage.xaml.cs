@@ -1,24 +1,29 @@
-﻿using SonicStreamer.Common.System;
+﻿using System;
+using SonicStreamer.Common.System;
 using SonicStreamer.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using SonicStreamer.Controls;
 
 namespace SonicStreamer.Pages
 {
     public sealed partial class SearchPage : Page
     {
-        private readonly SearchViewModel _searchVm;
-        private readonly PlaylistViewModel _playlistVm;
+        public readonly SearchViewModel SearchVm;
+        public readonly PlaylistViewModel PlaylistVm;
+        public readonly MainViewModel MainVm;
 
         public SearchPage()
         {
             InitializeComponent();
 
-            if (ResourceLoader.Current.GetResource(ref _searchVm, Constants.ViewModelSearch) == false)
-                _searchVm = new SearchViewModel();
-            if (ResourceLoader.Current.GetResource(ref _playlistVm, Constants.ViewModelPlaylist) == false)
-                _playlistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref SearchVm, Constants.ViewModelSearch) == false)
+                SearchVm = new SearchViewModel();
+            if (ResourceLoader.Current.GetResource(ref PlaylistVm, Constants.ViewModelPlaylist) == false)
+                PlaylistVm = new PlaylistViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -31,19 +36,21 @@ namespace SonicStreamer.Pages
             Frame.Navigate(typeof(TrackListingPage), e.ClickedItem);
         }
 
-        private async void PlaylistFlyout_Opening(object sender, object e)
+        private async void AddToPlaylist_Click(object sender, RoutedEventArgs e)
         {
-            await _playlistVm.LoadFlyoutDataAsync();
+            AddToPlaylistDialog.Content = new AddToPlaylistDialog();
+
+            var dialogResult = await AddToPlaylistDialog.ShowAsync();
+            if (dialogResult == ContentDialogResult.Primary)
+            {
+                await SearchVm.AddToPlaylistAsync();
+            }
+            PlaylistVm.ResetDialogInputs();
         }
 
-        private void PlaylistFlyout_Closed(object sender, object e)
+        private async void AddToPlaylistDialog_OnOpened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
-            _playlistVm.ResetFlyoutInputs();
-        }
-
-        private void AddToPlayback_Click(object sender, RoutedEventArgs e)
-        {
-            PlaylistFlyout.Hide();
+            await PlaylistVm.LoadDialogDataAsync();
         }
     }
 }

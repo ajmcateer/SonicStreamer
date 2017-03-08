@@ -8,19 +8,23 @@ namespace SonicStreamer.Pages
 {
     public sealed partial class PodcastPage : Page
     {
-        private readonly PodcastViewModel _podcastVm;
+        public readonly PodcastViewModel PodcastVm;
+        public readonly MainViewModel MainVm;
 
         public PodcastPage()
         {
             InitializeComponent();
 
-            _podcastVm = Application.Current.Resources[Constants.ViewModelPodcast] as PodcastViewModel;
+            if (ResourceLoader.Current.GetResource(ref PodcastVm, Constants.ViewModelPodcast) == false)
+                PodcastVm = new PodcastViewModel();
+            if (ResourceLoader.Current.GetResource(ref MainVm, Constants.ViewModelMain) == false)
+                MainVm = new MainViewModel();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackPageView(GetType().Name);
-            await _podcastVm.LoadDataAsync();
+            await PodcastVm.LoadDataAsync();
         }
     }
 }

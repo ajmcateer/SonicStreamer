@@ -8,6 +8,7 @@ using Windows.Media.Playback;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.UI.Core;
+using SonicStreamer.Common.Extension;
 
 namespace SonicStreamer.Subsonic.Data
 {
@@ -144,6 +145,8 @@ namespace SonicStreamer.Subsonic.Data
                 }
             }
         }
+        
+        private IDispatcherWrapper _dispatcherWrapper;
 
         public SubsonicPlayableObject()
         {
@@ -193,11 +196,22 @@ namespace SonicStreamer.Subsonic.Data
         /// </summary>
         public void CheckLocalFile()
         {
-            var startResult = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                async () =>
-                {
-                    Status = await IsLocalFileAvailable() ? PlayableObjectStatus.Offline : PlayableObjectStatus.Online;
-                });
+            try
+            {
+                _dispatcherWrapper = new DispatcherWrapper(CoreApplication.MainView.CoreWindow.Dispatcher);
+            }
+            catch (System.Exception)
+            {
+                _dispatcherWrapper = new FakeDispatcherWrapper();
+            }
+            var startResult =
+                _dispatcherWrapper.RunAsync(
+                    async () =>
+                    {
+                        Status = await IsLocalFileAvailable()
+                            ? PlayableObjectStatus.Offline
+                            : PlayableObjectStatus.Online;
+                    });
         }
 
         /// <summary>

@@ -122,6 +122,9 @@
     <Compile Include="Common\System\PlaybackService.cs" />
     <Compile Include="Common\System\ResourceLoader.cs" />
     <Compile Include="Common\System\SubsonicConnector.cs" />
+    <Compile Include="Controls\AddToPlaylistDialog.xaml.cs">
+      <DependentUpon>AddToPlaylistDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ArtistInfoView.xaml.cs">
       <DependentUpon>ArtistInfoView.xaml</DependentUpon>
     </Compile>
@@ -322,6 +325,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AddToPlaylistDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ArtistInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

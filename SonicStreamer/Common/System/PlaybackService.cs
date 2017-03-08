@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Media;
 using Windows.Media.Playback;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace SonicStreamer.Common.System
 {
@@ -51,6 +52,9 @@ namespace SonicStreamer.Common.System
             displayProperties.MusicProperties.Title = playableObject.Name;
             displayProperties.MusicProperties.Artist = playableObject.Artist;
             displayProperties.MusicProperties.AlbumTitle = playableObject.Album;
+            displayProperties.Thumbnail = (playableObject.Cover != null)
+                ? RandomAccessStreamReference.CreateFromUri(new Uri(playableObject.Cover.Uri))
+                : null;
             var track = playableObject as Track;
             if (track != null)
             {

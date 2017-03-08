@@ -3,9 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:SonicStreamer.Controls"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="playbackPage"
     DataContext="{StaticResource PlaybackVM}"
@@ -40,14 +38,9 @@
             <StackPanel Orientation="Horizontal">
                 <RadioButton
                     x:Name="HamburgerButton"
+                    Click="{x:Bind MainVm.HamburgerButtonClick}"
                     DataContext="{StaticResource MainVM}"
-                    Style="{StaticResource SplitViewHamburgerButtonStyle}">
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Click">
-                            <core:CallMethodAction MethodName="HamburgerButtonClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
-                </RadioButton>
+                    Style="{StaticResource SplitViewHamburgerButtonStyle}" />
                 <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="playback" />
             </StackPanel>
         </Grid>
@@ -56,6 +49,7 @@
                 <ListView
                     MaxWidth="800"
                     IsItemClickEnabled="True"
+                    ItemClick="{x:Bind PlaybackVm.PlaybackTracks_ItemClick}"
                     ItemsSource="{Binding Tracks}"
                     SelectedItem="{Binding CurrentTrack, Mode=TwoWay}"
                     SelectionChanged="PlaybackTracks_SelectionChanged">
@@ -105,11 +99,6 @@
                     <ListView.ItemContainerStyle>
                         <Style BasedOn="{StaticResource ListViewItemStyle}" TargetType="ListViewItem" />
                     </ListView.ItemContainerStyle>
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="ItemClick">
-                            <core:CallMethodAction MethodName="PlaybackTracks_ItemClick" TargetObject="{Binding Mode=OneWay}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
                 </ListView>
             </PivotItem>
             <PivotItem Header="artist info">
