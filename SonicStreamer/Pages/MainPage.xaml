@@ -1,0 +1,512 @@
+﻿<Page
+    x:Class="SonicStreamer.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:triggers="using:SonicStreamer.Common.System"
+    DataContext="{StaticResource MainVM}"
+    NavigationCacheMode="Required"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/SplitViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/SliderStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="48" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+
+        <SplitView
+            x:Name="MainSplitView"
+            Grid.ColumnSpan="3"
+            IsPaneOpen="{Binding IsPaneOpen}">
+            <SplitView.Pane>
+                <Grid Background="{StaticResource SplitViewBackgroundBrush}">
+                    <Grid.Resources>
+                        <Style BasedOn="{StaticResource SplitViewTextBlockStyle}" TargetType="TextBlock" />
+                        <Style BasedOn="{StaticResource SplitViewRadioButtonStyle}" TargetType="RadioButton" />
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ScrollViewer>
+                        <StackPanel>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.HamburgerButtonClick}"
+                                GroupName="Nav"
+                                Style="{StaticResource SplitViewHamburgerButtonStyle}">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE700;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.HomeButtonClick}"
+                                Content="Home"
+                                GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE10F;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.SearchButtonClick}"
+                                Content="Search"
+                                GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE094;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.ArtistsButtonClick}"
+                                Content="Artist"
+                                GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE125;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.AlbumsButtonClick}"
+                                Content="Albums"
+                                GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE958;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.FolderButtonClick}"
+                                Content="Folder"
+                                GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xEC50;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.PlaylistButtonClick}"
+                                Content="Playlist"
+                                GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE208;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                            <RadioButton
+                                Click="{x:Bind MainVm.PodcastButtonClick}"
+                                Content="Podcast"
+                                GroupName="Nav">
+                                <RadioButton.Tag>
+                                    <TextBlock Text="&#xE1D5;" />
+                                </RadioButton.Tag>
+                            </RadioButton>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="1">
+
+                        <RadioButton
+                            Click="{x:Bind MainVm.SettingsButtonClick}"
+                            Content="Settings"
+                            GroupName="Nav">
+                            <RadioButton.Tag>
+                                <TextBlock Text="&#xE115;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                        <RadioButton
+                            Click="LogoutButtonClick"
+                            Content="Logout"
+                            GroupName="Nav">
+                            <RadioButton.Tag>
+                                <TextBlock Text="&#xE7E8;" />
+                            </RadioButton.Tag>
+                        </RadioButton>
+
+                    </StackPanel>
+
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Frame Content="{Binding MainFrame}" />
+                    <!--  playback  -->
+                    <UserControl
+                        Grid.Row="1"
+                        Height="68"
+                        DataContext="{StaticResource PlaybackVM}"
+                        Visibility="{Binding IsPlaybackPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid>
+                            <Grid x:Name="SmallPlaybackPanel" Visibility="{Binding IsSmallPlaybackEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="164" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Margin="0,5" Tapped="{x:Bind MainVm.PlaybackButtonClick}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="5,0">
+                                        <Image Source="ms-appx:///Assets/cover.png" />
+                                        <Image Canvas.ZIndex="1" Source="{Binding CurrentTrack.Cover.Uri}" />
+                                    </Grid>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding CurrentTrack.Name}" />
+                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding CurrentTrack.Artist}" />
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Button Click="{x:Bind PlaybackVm.PlayPrevious}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="Previous" />
+                                    </Button>
+                                    <Button Click="{x:Bind PlaybackVm.Play}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="{Binding PlayButtonIcon}" />
+                                    </Button>
+                                    <Button Click="{x:Bind PlaybackVm.PlayNext}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="Next" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="XboxPlaybackPanel">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="5,0">
+                                        <Image Source="ms-appx:///Assets/cover.png" />
+                                        <Image Canvas.ZIndex="1" Source="{Binding CurrentTrack.Cover.Uri}" />
+                                    </Grid>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding CurrentTrack.Name}" />
+                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding CurrentTrack.Artist}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid
+                                    Grid.Column="1"
+                                    Margin="5,0"
+                                    VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Slider
+                                        Grid.ColumnSpan="2"
+                                        IsThumbToolTipEnabled="False"
+                                        Maximum="{Binding CurrentTrackDuration}"
+                                        PointerCaptureLost="{x:Bind PlaybackVm.PlaybackSlider_PointerCaptureLost}"
+                                        PointerEntered="{x:Bind PlaybackVm.PlaybackSlider_PointerEntered}"
+                                        PointerExited="{x:Bind PlaybackVm.PlaybackSlider_PointerExited}"
+                                        Style="{StaticResource OrangeSliderStyle}"
+                                        Value="{Binding CurrentTrackPosition, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Style="{StaticResource OrangeCaptionTextBlockStyle}"
+                                        Text="{Binding PlayedDuration}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource OrangeCaptionTextBlockStyle}"
+                                        Text="{Binding RemainingDuration}" />
+                                </Grid>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <Button Click="{x:Bind PlaybackVm.PlayPrevious}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="Previous" />
+                                    </Button>
+                                    <Button Click="{x:Bind PlaybackVm.Play}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="{Binding PlayButtonIcon}" />
+                                    </Button>
+                                    <Button Click="{x:Bind PlaybackVm.PlayNext}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="Next" />
+                                    </Button>
+                                    <Line
+                                        Margin="5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Stroke="Orange"
+                                        Y1="40" />
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon x:Name="XboxVolumeButtonIcon" Symbol="Volume" />
+                                        <Button.Flyout>
+                                            <Flyout Opening="Flyout_Opening">
+                                                <Slider
+                                                    x:Name="XboxVolumeSlider"
+                                                    Height="150"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Vertical"
+                                                    Style="{StaticResource OrangeSliderStyle}"
+                                                    ValueChanged="VolumeSlider_ValueChanged" />
+                                                <Flyout.FlyoutPresenterStyle>
+                                                    <Style TargetType="FlyoutPresenter">
+                                                        <Setter Property="Background" Value="Black" />
+                                                        <Setter Property="BorderBrush" Value="Orange" />
+                                                        <Setter Property="MinWidth" Value="50" />
+                                                        <Setter Property="Width" Value="50" />
+                                                    </Style>
+                                                </Flyout.FlyoutPresenterStyle>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <Line
+                                        Margin="5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Stroke="Orange"
+                                        Y1="40" />
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="More" />
+                                        <Button.Flyout>
+                                            <Flyout>
+                                                <StackPanel>
+                                                    <ToggleButton
+                                                        HorizontalAlignment="Center"
+                                                        Checked="{x:Bind PlaybackVm.SwitchOnRepeatingMode}"
+                                                        IsChecked="{Binding IsRepeating, Mode=TwoWay}"
+                                                        Style="{StaticResource PlaybackToggleButtonStyle}"
+                                                        Unchecked="{x:Bind PlaybackVm.SwitchOffRepeatingMode}">
+                                                        <SymbolIcon Symbol="RepeatAll" />
+                                                    </ToggleButton>
+                                                    <ToggleButton
+                                                        HorizontalAlignment="Center"
+                                                        Checked="{x:Bind PlaybackVm.SwitchOnShuffleMode}"
+                                                        IsChecked="{Binding IsShuffling, Mode=TwoWay}"
+                                                        Style="{StaticResource PlaybackToggleButtonStyle}"
+                                                        Unchecked="{x:Bind PlaybackVm.SwitchOffShuffleMode}">
+                                                        <SymbolIcon Symbol="Shuffle" />
+                                                    </ToggleButton>
+                                                    <Button
+                                                        HorizontalAlignment="Center"
+                                                        Click="{x:Bind MainVm.PlaybackButtonClick}"
+                                                        DataContext="{StaticResource MainVM}"
+                                                        Style="{StaticResource PlaybackButtonStyle}">
+                                                        <SymbolIcon Symbol="MusicInfo" />
+                                                    </Button>
+                                                </StackPanel>
+                                                <Flyout.FlyoutPresenterStyle>
+                                                    <Style TargetType="FlyoutPresenter">
+                                                        <Setter Property="Background" Value="Black" />
+                                                        <Setter Property="BorderBrush" Value="Orange" />
+                                                        <Setter Property="MinWidth" Value="0" />
+                                                        <Setter Property="Width" Value="50" />
+                                                    </Style>
+                                                </Flyout.FlyoutPresenterStyle>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="WidePlaybackPanel">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="5,0">
+                                        <Image Source="ms-appx:///Assets/cover.png" />
+                                        <Image Canvas.ZIndex="1" Source="{Binding CurrentTrack.Cover.Uri}" />
+                                    </Grid>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding CurrentTrack.Name}" />
+                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding CurrentTrack.Artist}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid
+                                    Grid.Column="1"
+                                    Margin="5,0"
+                                    VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Slider
+                                        Grid.ColumnSpan="2"
+                                        IsThumbToolTipEnabled="False"
+                                        Maximum="{Binding CurrentTrackDuration}"
+                                        PointerCaptureLost="{x:Bind PlaybackVm.PlaybackSlider_PointerCaptureLost}"
+                                        PointerEntered="{x:Bind PlaybackVm.PlaybackSlider_PointerEntered}"
+                                        PointerExited="{x:Bind PlaybackVm.PlaybackSlider_PointerExited}"
+                                        Style="{StaticResource OrangeSliderStyle}"
+                                        Value="{Binding CurrentTrackPosition, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Style="{StaticResource OrangeCaptionTextBlockStyle}"
+                                        Text="{Binding PlayedDuration}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource OrangeCaptionTextBlockStyle}"
+                                        Text="{Binding RemainingDuration}" />
+                                </Grid>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <Button Click="{x:Bind PlaybackVm.PlayPrevious}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="Previous" />
+                                    </Button>
+                                    <Button Click="{x:Bind PlaybackVm.Play}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="{Binding PlayButtonIcon}" />
+                                    </Button>
+                                    <Button Click="{x:Bind PlaybackVm.PlayNext}" Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="Next" />
+                                    </Button>
+                                    <Line
+                                        Margin="5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Stroke="Orange"
+                                        Y1="40" />
+                                    <Button Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon x:Name="VolumeButtonIcon" Symbol="Volume" />
+                                        <Button.Flyout>
+                                            <Flyout Opening="Flyout_Opening">
+                                                <Slider
+                                                    x:Name="VolumeSlider"
+                                                    Height="150"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Vertical"
+                                                    Style="{StaticResource OrangeSliderStyle}"
+                                                    ValueChanged="VolumeSlider_ValueChanged" />
+                                                <Flyout.FlyoutPresenterStyle>
+                                                    <Style TargetType="FlyoutPresenter">
+                                                        <Setter Property="Background" Value="Black" />
+                                                        <Setter Property="BorderBrush" Value="Orange" />
+                                                        <Setter Property="MinWidth" Value="50" />
+                                                        <Setter Property="Width" Value="50" />
+                                                    </Style>
+                                                </Flyout.FlyoutPresenterStyle>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <Line
+                                        Margin="5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Stroke="Orange"
+                                        Y1="40" />
+                                    <ToggleButton
+                                        Checked="{x:Bind PlaybackVm.SwitchOnRepeatingMode}"
+                                        IsChecked="{Binding IsRepeating, Mode=TwoWay}"
+                                        Style="{StaticResource PlaybackToggleButtonStyle}"
+                                        Unchecked="{x:Bind PlaybackVm.SwitchOffRepeatingMode}">
+                                        <SymbolIcon Symbol="RepeatAll" />
+                                    </ToggleButton>
+                                    <ToggleButton
+                                        Checked="{x:Bind PlaybackVm.SwitchOnShuffleMode}"
+                                        IsChecked="{Binding IsShuffling, Mode=TwoWay}"
+                                        Style="{StaticResource PlaybackToggleButtonStyle}"
+                                        Unchecked="{x:Bind PlaybackVm.SwitchOffShuffleMode}">
+                                        <SymbolIcon Symbol="Shuffle" />
+                                    </ToggleButton>
+                                    <Button
+                                        Click="{x:Bind MainVm.PlaybackButtonClick}"
+                                        DataContext="{StaticResource MainVM}"
+                                        Style="{StaticResource PlaybackButtonStyle}">
+                                        <SymbolIcon Symbol="MusicInfo" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="0" />
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Target="WidePlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="SmallPlaybackPanel.Visibility" Value="Visible" />
+                                            <Setter Target="XboxPlaybackPanel.Visibility" Value="Collapsed" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="500" />
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Target="WidePlaybackPanel.Visibility" Value="Visible" />
+                                            <Setter Target="SmallPlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="XboxPlaybackPanel.Visibility" Value="Collapsed" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <triggers:DeviceFamilyTrigger DeviceFamily="Windows.Xbox" />
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Target="WidePlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="SmallPlaybackPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="XboxPlaybackPanel.Visibility" Value="Visible" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </UserControl>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</Page>

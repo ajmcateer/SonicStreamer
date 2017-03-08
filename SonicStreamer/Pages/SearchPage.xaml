@@ -1,0 +1,192 @@
+﻿<Page
+    x:Class="SonicStreamer.Pages.SearchPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding Source={StaticResource SearchVM}}"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/CommandBarStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/TextBoxStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ListViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/PivotStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ListingItemStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/SplitViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style
+                x:Key="NoResultTextBlockStyle"
+                BasedOn="{StaticResource OrangeSubtitleTextBlockStyle}"
+                TargetType="TextBlock">
+                <Setter Property="Text" Value="No results available" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Margin" Value="0,100,0,0" />
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Page.BottomAppBar>
+        <CommandBar
+            OverflowButtonVisibility="Visible"
+            Style="{StaticResource OrangeCommandBarStyle}"
+            Visibility="{Binding IsBottomAppBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <CommandBar.Resources>
+                <Style BasedOn="{StaticResource OrangeAppBarButtonStyle}" TargetType="AppBarButton" />
+            </CommandBar.Resources>
+            <AppBarButton
+                Click="{x:Bind SearchVm.PlayClick}"
+                Icon="Play"
+                Label="Play Selection" />
+            <AppBarButton
+                Click="{x:Bind SearchVm.AddClick}"
+                Icon="Add"
+                Label="Add to Playback" />
+            <AppBarButton
+                Click="AddToPlaylist_Click"
+                Icon="Favorite"
+                Label="Add to Playlist" />
+            <AppBarButton
+                Click="{x:Bind SearchVm.DownloadTracksClick}"
+                Icon="Download"
+                Label="Download" />
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ContentDialog
+            x:Name="AddToPlaylistDialog"
+            IsPrimaryButtonEnabled="True"
+            IsSecondaryButtonEnabled="True"
+            Opened="AddToPlaylistDialog_OnOpened"
+            PrimaryButtonText="Add To Playlist"
+            SecondaryButtonText="Cancel" />
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton
+                    x:Name="HamburgerButton"
+                    Click="{x:Bind MainVm.HamburgerButtonClick}"
+                    DataContext="{StaticResource MainVM}"
+                    Style="{StaticResource SplitViewHamburgerButtonStyle}" />
+                <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="search" />
+            </StackPanel>
+            <Grid Grid.Column="1" HorizontalAlignment="Right">
+                <ToggleButton IsChecked="{Binding SelectionMode, Mode=TwoWay, Converter={StaticResource SelectionModeToBooleanConverter}}" Style="{StaticResource PlaybackToggleButtonStyle}">
+                    <SymbolIcon Symbol="Bullets" />
+                </ToggleButton>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid MaxWidth="300" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    VerticalAlignment="Center"
+                    KeyUp="{x:Bind SearchVm.SearchField_KeyUp}"
+                    PlaceholderText="Search"
+                    Style="{StaticResource OrangeTextBoxStyle}"
+                    Text="{Binding SearchString, Mode=TwoWay}" />
+                <Button
+                    Grid.Column="1"
+                    Click="{x:Bind SearchVm.SearchClick}"
+                    Style="{StaticResource PlaybackButtonStyle}">
+                    <SymbolIcon Symbol="Find" />
+                </Button>
+            </Grid>
+            <Pivot Grid.Row="1" Visibility="{Binding IsResultViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <PivotItem Header="artists">
+                    <Grid>
+                        <TextBlock Style="{StaticResource NoResultTextBlockStyle}" Visibility="{Binding IsNoArtistResultLabelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ListView
+                            x:Name="ArtistResultListView"
+                            IsItemClickEnabled="{Binding IsItemClickEnabled}"
+                            ItemClick="SearchResult_ItemClick"
+                            ItemsSource="{Binding ResultArtist}"
+                            SelectionChanged="{x:Bind SearchVm.SearchResult_SelectionChanged}"
+                            SelectionMode="{Binding SelectionMode}"
+                            Style="{StaticResource ListingListViewStyle}"
+                            Visibility="{Binding IsArtistResultViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+                </PivotItem>
+                <PivotItem Header="albums">
+                    <Grid>
+                        <TextBlock Style="{StaticResource NoResultTextBlockStyle}" Visibility="{Binding IsNoAlbumResultLabelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ListView
+                            x:Name="AlbumResultListView"
+                            IsItemClickEnabled="{Binding IsItemClickEnabled}"
+                            ItemClick="SearchResult_ItemClick"
+                            ItemsSource="{Binding ResultAlbum}"
+                            SelectionChanged="{x:Bind SearchVm.SearchResult_SelectionChanged}"
+                            SelectionMode="{Binding SelectionMode}"
+                            Style="{StaticResource ListingListViewStyle}"
+                            Visibility="{Binding IsAlbumResultViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+                </PivotItem>
+                <PivotItem Header="tracks">
+                    <Grid>
+                        <TextBlock Style="{StaticResource NoResultTextBlockStyle}" Visibility="{Binding IsNoTrackResultLabelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ListView
+                            MaxWidth="800"
+                            IsItemClickEnabled="False"
+                            IsMultiSelectCheckBoxEnabled="False"
+                            ItemTemplate="{StaticResource TrackListItemTemplate}"
+                            ItemsSource="{Binding ResultTrack}"
+                            SelectionChanged="{x:Bind SearchVm.SearchResult_SelectionChanged}"
+                            SelectionMode="{Binding TracksSelectionMode}"
+                            Visibility="{Binding IsTrackResultViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ListView.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource ListViewItemStyle}" TargetType="ListViewItem">
+                                    <Setter Property="Margin" Value="10,0" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
+                </PivotItem>
+            </Pivot>
+        </Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ArtistResultListView.Style" Value="{StaticResource SmallListingListViewStyle}" />
+                        <Setter Target="AlbumResultListView.Style" Value="{StaticResource SmallListingListViewStyle}" />
+                        <Setter Target="HamburgerButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ArtistResultListView.Style" Value="{StaticResource LargeListingListViewStyle}" />
+                        <Setter Target="AlbumResultListView.Style" Value="{StaticResource LargeListingListViewStyle}" />
+                        <Setter Target="HamburgerButton.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</Page>

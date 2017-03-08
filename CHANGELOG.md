@@ -1,14 +1,25 @@
+### 2.4 Build xxxx (2017-xx-xx)
+
+* [New]: MusicBrainz Support
+* [New]: Settings Page shows now the size of the local track cache
+* [New]: Added links on Settings Page for license and gitlab repo
+* [Changed]: Modified and extended views with artist info
+* [Fixed]: Data loss while getting metadata of current track in playback
+* [Fixed]: Page title on detailed album view
+* [Fixed]: Newest album ordering on HomePage for mobile devices
+* [Fixed]: Missing Cover in System Media Transport Controls (SMTC)
+
 ### 2.3 Build 6239 (2017-01-30)
 
-* [Changed] Updated links on info view for the new domain axelander.net
+* [Changed]: Updated links on info view for the new domain axelander.net
 
 ### 2.3 Build 6235 (2017-01-27)
 
-* [Fixed] Unable to connect to server in the local network
+* [Fixed]: Unable to connect to server in the local network
 
 ### 2.3 Build 6224 (2017-01-16)
 
-* [Fixed] Broken views due to missing cover for Madsonic server
+* [Fixed]: Broken views due to missing cover for Madsonic server
 
 ### 2.3 Build 6213 (2017-01-10)
 
@@ -26,9 +37,9 @@
 
 ### 2.2.0 (2016-09-28)
 
-* [New] Support for Xbox One
-* [New] Added Volume Control (known from the Windows 8.1 version)
-* [Changed] Reworked Background Media Playback with the new Single Process Model
+* [New]: Support for Xbox One
+* [New]: Added Volume Control (known from the Windows 8.1 version)
+* [Changed]: Reworked Background Media Playback with the new Single Process Model
 
 ### 2.1.0 (2016-07-10)
 
@@ -77,15 +88,15 @@ Phone:
 
 ### 1.2.2 / 1.2.3 (2015-05-11)
 
-* [Fixed] Crashes due to invalid XML data
+* [Fixed]: Crashes due to invalid XML data
 
 ### 1.2.1 (2015-03-27)
 
 WinRT / Windows Phone:
 
-* [Fixed] App initialization will no longer overwrite roaming settings. Scrobbling should now work after app restart
-* [Fixed] Logout should now clear app data accordingly. It may happened that you saw old data after switching to another server.
-* [Changed] Improved synchronization of existing playlists
+* [Fixed]: App initialization will no longer overwrite roaming settings. Scrobbling should now work after app restart
+* [Fixed]: Logout should now clear app data accordingly. It may happened that you saw old data after switching to another server.
+* [Changed]: Improved synchronization of existing playlists
 
 Windows Phone:
 
@@ -95,20 +106,20 @@ Windows Phone:
 
 ### 1.2.0 (2015-03-22)
 
-* [New] LastFM scrobble
-* [Fixed] Fixed current track on playback view for Windows Phone
+* [New]: LastFM scrobble
+* [Fixed]: Fixed current track on playback view for Windows Phone
 
 ### 1.1.0 (2015-03-02)
 
-* [New] Start Page has now two new sections (most played, frequent played)
-* [New] LastFM Section which shows some information about the artist
-* [New] Login Page: Pressing Enter in password box starts connection process
-* [New] Seach Page: Pressing Enter in search box starts search
-* [Changed] Optimized Views for dynamic screen resolution
-* [Changed] New Icon in Folder Browser
-* [Changed] Snapped Player in expanded mode is now integrated in views (Player is no longer an overlay)
-* [Changed] Snapped Player is now a bit wider and track list has now more space
-* [Fixed] Privacy Policy Menu Duplicate after logout
+* [New]: Start Page has now two new sections (most played, frequent played)
+* [New]: LastFM Section which shows some information about the artist
+* [New]: Login Page: Pressing Enter in password box starts connection process
+* [New]: Seach Page: Pressing Enter in search box starts search
+* [Changed]: Optimized Views for dynamic screen resolution
+* [Changed]: New Icon in Folder Browser
+* [Changed]: Snapped Player in expanded mode is now integrated in views (Player is no longer an overlay)
+* [Changed]: Snapped Player is now a bit wider and track list has now more space
+* [Fixed]: Privacy Policy Menu Duplicate after logout
 
 ### 1.0.0 (2015-02-23)
 
@@ -116,12 +127,12 @@ Windows Phone:
 
 ### 1.0.7 (2015-02-09)
 
-* [New] SuspensionManager – If you resume the App after suspension some settings will be restored (e.g. playback and current track).
-* [New] Improved Playback handling – After switching from shuffled play mode to the normal mode the original track order of the playback will be restored.
-* [New] Improved Cover Download – Cover images are downloaded in required sizes and not in the original size (reduces traffic).
-* [New] Shuffle and Repeat Mode are also part of Roaming Settings.
-* [Changed] Font color of selected items on Album / Artist Page changed to white.
-* [Fixed] AppBar on Folder Page should work now during track selection.
+* [New]: SuspensionManager – If you resume the App after suspension some settings will be restored (e.g. playback and current track).
+* [New]: Improved Playback handling – After switching from shuffled play mode to the normal mode the original track order of the playback will be restored.
+* [New]: Improved Cover Download – Cover images are downloaded in required sizes and not in the original size (reduces traffic).
+* [New]: Shuffle and Repeat Mode are also part of Roaming Settings.
+* [Changed]: Font color of selected items on Album / Artist Page changed to white.
+* [Fixed]: AppBar on Folder Page should work now during track selection.
 
 ### 1.0.0 (2014-11-30)
 

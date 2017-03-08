@@ -1,0 +1,463 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{DE62142E-CFF5-4A5C-8F17-A9CA3C37671F}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SonicStreamer</RootNamespace>
+    <AssemblyName>SonicStreamer</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>SonicStreamer_StoreKey.pfx</PackageCertificateKeyFile>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>7908A81FC72F9841A0A2C8F37DADE2B4069BDE96</PackageCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="project.json" />
+    <None Include="SonicStreamer_StoreKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Converter\BooleanToColorConverter.cs" />
+    <Compile Include="Common\Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Common\Converter\SelectionModeToBooleanConverter.cs" />
+    <Compile Include="Common\Extension\CustomXmlReader.cs" />
+    <Compile Include="Common\Extension\DispatcherWrapper.cs" />
+    <Compile Include="Common\Extension\Extensions.cs" />
+    <Compile Include="Common\Extension\FakeDispatcherWrapper.cs" />
+    <Compile Include="Common\Extension\GridViewExtensions.cs" />
+    <Compile Include="Common\Extension\IDispatcherWrapper.cs" />
+    <Compile Include="Common\Extension\ListBoxExtensions.cs" />
+    <Compile Include="Common\Extension\ListViewExtensions.cs" />
+    <Compile Include="Common\System\BaseXmlServerConnection.cs" />
+    <Compile Include="Common\System\Constants.cs" />
+    <Compile Include="Common\System\DeviceFamilyTrigger.cs" />
+    <Compile Include="Common\System\PlaybackService.cs" />
+    <Compile Include="Common\System\ResourceLoader.cs" />
+    <Compile Include="Common\System\SubsonicConnector.cs" />
+    <Compile Include="Controls\AddToPlaylistDialog.xaml.cs">
+      <DependentUpon>AddToPlaylistDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ArtistInfoView.xaml.cs">
+      <DependentUpon>ArtistInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MobilePlaybackView.xaml.cs">
+      <DependentUpon>MobilePlaybackView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SimilarArtistsView.xaml.cs">
+      <DependentUpon>SimilarArtistsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WrapGrid\OrientedSize.cs" />
+    <Compile Include="Controls\WrapGrid\WrapPanel.cs" />
+    <Compile Include="LastFM\Data\LastFMAlbum.cs" />
+    <Compile Include="LastFM\Data\LastFMArtist.cs" />
+    <Compile Include="LastFM\Data\LastFMImage.cs" />
+    <Compile Include="LastFM\Data\LastFMObject.cs" />
+    <Compile Include="LastFM\Data\LastFMTag.cs" />
+    <Compile Include="LastFM\Server\LastFMConnection.cs" />
+    <Compile Include="MusicBrainz\Configuration.cs" />
+    <Compile Include="MusicBrainz\Entities\Artist.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\ArtistList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\BaseList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\MediumList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\RecordingList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\RelationList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\ReleaseGroupList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\ReleaseList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\TagList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\TrackList.cs" />
+    <Compile Include="MusicBrainz\Entities\Collections\WorkList.cs" />
+    <Compile Include="MusicBrainz\Entities\CoverArtArchive.cs" />
+    <Compile Include="MusicBrainz\Entities\Entity.cs" />
+    <Compile Include="MusicBrainz\Entities\Include\ArtistIncludeEntityHelper.cs" />
+    <Compile Include="MusicBrainz\Entities\Label.cs" />
+    <Compile Include="MusicBrainz\Entities\LabelInfo.cs" />
+    <Compile Include="MusicBrainz\Entities\Medium.cs" />
+    <Compile Include="MusicBrainz\Entities\Metadata.cs" />
+    <Compile Include="MusicBrainz\Entities\Metadata\ArtistMetadata.cs" />
+    <Compile Include="MusicBrainz\Entities\Metadata\RecordingMetadata.cs" />
+    <Compile Include="MusicBrainz\Entities\Metadata\ReleaseGroupMetadata.cs" />
+    <Compile Include="MusicBrainz\Entities\Metadata\ReleaseMetadata.cs" />
+    <Compile Include="MusicBrainz\Entities\NameCredit.cs" />
+    <Compile Include="MusicBrainz\Entities\Rating.cs" />
+    <Compile Include="MusicBrainz\Entities\Recording.cs" />
+    <Compile Include="MusicBrainz\Entities\Relation.cs" />
+    <Compile Include="MusicBrainz\Entities\Release.cs" />
+    <Compile Include="MusicBrainz\Entities\ReleaseGroup.cs" />
+    <Compile Include="MusicBrainz\Entities\Tag.cs" />
+    <Compile Include="MusicBrainz\Entities\Track.cs" />
+    <Compile Include="MusicBrainz\Entities\Work.cs" />
+    <Compile Include="MusicBrainz\QueryParameters.cs" />
+    <Compile Include="MusicBrainz\WebRequestHelper.cs" />
+    <Compile Include="Pages\AlbumsPage.xaml.cs">
+      <DependentUpon>AlbumsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ArtistsPage.xaml.cs">
+      <DependentUpon>ArtistsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FolderPage.xaml.cs">
+      <DependentUpon>FolderPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PlaybackPage.xaml.cs">
+      <DependentUpon>PlaybackPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PlaylistPage.xaml.cs">
+      <DependentUpon>PlaylistPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PodcastPage.xaml.cs">
+      <DependentUpon>PodcastPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TrackListingPage.xaml.cs">
+      <DependentUpon>TrackListingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleData\SampleData.cs" />
+    <Compile Include="SampleData\SampleDataCreator.cs" />
+    <Compile Include="Subsonic\Data\Album.cs" />
+    <Compile Include="Subsonic\Data\Artist.cs" />
+    <Compile Include="Subsonic\Data\CoverArt.cs" />
+    <Compile Include="Subsonic\Data\Folder.cs" />
+    <Compile Include="Subsonic\Data\Playlist.cs" />
+    <Compile Include="Subsonic\Data\Podcast.cs" />
+    <Compile Include="Subsonic\Data\PodcastEpisode.cs" />
+    <Compile Include="Subsonic\Data\SubsonicMusicObject.cs" />
+    <Compile Include="Subsonic\Data\SubsonicObject.cs" />
+    <Compile Include="Subsonic\Data\SubsonicPlayableObject.cs" />
+    <Compile Include="Subsonic\Data\Track.cs" />
+    <Compile Include="Subsonic\Exception\SubsonicConnectionException.cs" />
+    <Compile Include="Subsonic\Server\BaseSubsonicConnection.cs" />
+    <Compile Include="Subsonic\Server\MadsonicConnection.cs" />
+    <Compile Include="Subsonic\Server\SubsonicConnection.cs" />
+    <Compile Include="Subsonic\Server\SubsonicSyncEventArgs.cs" />
+    <Compile Include="ViewModelItems\ArtistInfo.cs" />
+    <Compile Include="ViewModelItems\GroupedFolderCollection.cs" />
+    <Compile Include="ViewModelItems\ListingItem.cs" />
+    <Compile Include="ViewModelItems\PodcastEpisodeListingItem.cs" />
+    <Compile Include="ViewModelItems\TrackListingItem.cs" />
+    <Compile Include="ViewModels\AbstractListingViewModel.cs" />
+    <Compile Include="ViewModels\AlbumsViewModel.cs" />
+    <Compile Include="ViewModels\ApplicationSettingsViewModel.cs" />
+    <Compile Include="ViewModels\ArtistsViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\FolderViewModel.cs" />
+    <Compile Include="ViewModels\IViewModelSerializable.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\PlaybackViewModel.cs" />
+    <Compile Include="ViewModels\PlaylistViewModel.cs" />
+    <Compile Include="ViewModels\PodcastViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\StartViewModel.cs" />
+    <Compile Include="ViewModels\TrackListingViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\cover.png" />
+    <Content Include="Assets\folder.png" />
+    <Content Include="Assets\LoginPage Logo.png" />
+    <Content Include="Assets\logo.png" />
+    <Content Include="Assets\SocialIcons\Apple.png" />
+    <Content Include="Assets\SocialIcons\Bandcamp.png" />
+    <Content Include="Assets\SocialIcons\Facebook.png" />
+    <Content Include="Assets\SocialIcons\HomePage.png" />
+    <Content Include="Assets\SocialIcons\Instagram.png" />
+    <Content Include="Assets\SocialIcons\lastfm.png" />
+    <Content Include="Assets\SocialIcons\Myspace.png" />
+    <Content Include="Assets\SocialIcons\Soundcloud.png" />
+    <Content Include="Assets\SocialIcons\Spotify.png" />
+    <Content Include="Assets\SocialIcons\Twitter.png" />
+    <Content Include="Assets\SocialIcons\Wikipedia.png" />
+    <Content Include="Assets\SocialIcons\YouTube.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square310x310Logo.scale-125.png" />
+    <Content Include="Assets\Square310x310Logo.scale-150.png" />
+    <Content Include="Assets\Square310x310Logo.scale-200.png" />
+    <Content Include="Assets\Square310x310Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48_altform-unplated.png" />
+    <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Assets\Square71x71Logo.scale-125.png" />
+    <Content Include="Assets\Square71x71Logo.scale-150.png" />
+    <Content Include="Assets\Square71x71Logo.scale-200.png" />
+    <Content Include="Assets\Square71x71Logo.scale-400.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Controls\AddToPlaylistDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ArtistInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MobilePlaybackView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SimilarArtistsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\AlbumsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ArtistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FolderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PlaybackPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PlaylistPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PodcastPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TrackListingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\ComboBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\CommandBarStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\ListBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\ListingItemStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ListViewStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\PivotStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\ProgressRingStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\SliderStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\SplitViewStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\TextBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Styles\TextBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

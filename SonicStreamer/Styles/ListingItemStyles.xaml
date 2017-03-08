@@ -1,0 +1,183 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///Styles/TextBlockStyles.xaml" />
+        <ResourceDictionary Source="ms-appx:///Styles/ButtonStyles.xaml" />
+        <ResourceDictionary Source="ms-appx:///Styles/ListViewStyles.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region ItemTemplate-->
+    <DataTemplate x:Key="ListingItemTemplate">
+        <UserControl>
+            <Grid
+                x:Name="ListingItemGrid"
+                Height="130"
+                MaxWidth="300">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid Width="120" Height="120">
+                    <Image Source="ms-appx:///Assets/cover.png" />
+                    <Image Canvas.ZIndex="1" Source="{Binding MusicObject.Cover.Uri}" />
+                    <Button
+                        Margin="0,0,5,5"
+                        Canvas.ZIndex="1"
+                        Style="{StaticResource OrangePlayButtonStyle}">
+                        <interactivity:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="Click">
+                                <core:CallMethodAction MethodName="PlayClick" TargetObject="{Binding}" />
+                            </core:EventTriggerBehavior>
+                        </interactivity:Interaction.Behaviors>
+                    </Button>
+                </Grid>
+                <StackPanel Grid.Column="1" Margin="5,10,10,10">
+                    <TextBlock
+                        Margin="0,0,20,5"
+                        Style="{StaticResource ItemTitleTextBlockStyle}"
+                        Text="{Binding MusicObject.Name}" />
+                    <TextBlock Style="{StaticResource ItemSubtitleTextBlockStyle}" Text="{Binding InfRow1}" />
+                    <TextBlock Style="{StaticResource ItemSubtitleTextBlockStyle}" Text="{Binding InfRow2}" />
+                    <TextBlock Style="{StaticResource ItemSubtitleTextBlockStyle}" Text="{Binding InfRow3}" />
+                </StackPanel>
+                <Button
+                    Grid.Column="1"
+                    Margin="0,0,5,0"
+                    Style="{StaticResource ItemOptionButtonStyle}">
+                    <Button.Flyout>
+                        <MenuFlyout Placement="Bottom">
+                            <MenuFlyoutItem Text="Play">
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Click">
+                                        <core:CallMethodAction MethodName="PlayClick" TargetObject="{Binding}" />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem Text="Add to Playback">
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Click">
+                                        <core:CallMethodAction MethodName="AddToPlaybackClick" TargetObject="{Binding}" />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem Text="Download">
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Click">
+                                        <core:CallMethodAction MethodName="DownloadListingItemClick" TargetObject="{Binding}" />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                            </MenuFlyoutItem>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup>
+                        <VisualState>
+                            <VisualState.StateTriggers>
+                                <AdaptiveTrigger MinWindowWidth="500" />
+                            </VisualState.StateTriggers>
+                            <VisualState.Setters>
+                                <Setter Target="ListingItemGrid.MinWidth" Value="300" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Grid>
+        </UserControl>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region ItemStyle-->
+    <Style
+        x:Key="ListingItemStyle"
+        BasedOn="{StaticResource ListViewItemStyle}"
+        TargetType="ListViewItem">
+        <Setter Property="Padding" Value="5,0" />
+        <Setter Property="Margin" Value="5" />
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Group Styles-->
+    <DataTemplate x:Key="ListingGroupHeaderStyle">
+        <Border
+            Width="35"
+            Height="35"
+            BorderBrush="Orange"
+            BorderThickness="2">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI"
+                FontSize="20"
+                FontWeight="Light"
+                Foreground="Orange"
+                Text="{Binding Key}" />
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region SemanticZoom GridView Styles-->
+    <DataTemplate x:Key="ZoomedOutGridViewItemTemplate">
+        <TextBlock
+            FontFamily="Segoe UI"
+            FontSize="23"
+            FontWeight="Light"
+            Foreground="Orange"
+            Text="{Binding Group.Key}" />
+    </DataTemplate>
+    <ItemsPanelTemplate x:Key="ZoomedOutGridViewItemsPanelTemplate">
+        <ItemsWrapGrid
+            HorizontalAlignment="Center"
+            ItemHeight="65"
+            ItemWidth="65"
+            MaximumRowsOrColumns="8"
+            Orientation="Horizontal" />
+    </ItemsPanelTemplate>
+    <Style x:Key="ZoomedOutGridViewItemStyle" TargetType="GridViewItem">
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background" Value="Black" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="Orange" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Bottom" />
+    </Style>
+    <!--#endregion-->
+
+    <!--#region ListView Style-->
+    <Style x:Key="ListingListViewStyle" TargetType="ListView">
+        <Setter Property="IsItemClickEnabled" Value="True" />
+        <Setter Property="SelectionMode" Value="None" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ListingItemStyle}" />
+        <Setter Property="ItemTemplate" Value="{StaticResource ListingItemTemplate}" />
+    </Style>
+    <Style
+        x:Key="SmallListingListViewStyle"
+        BasedOn="{StaticResource ListingListViewStyle}"
+        TargetType="ListView">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
+        x:Key="LargeListingListViewStyle"
+        BasedOn="{StaticResource ListingListViewStyle}"
+        TargetType="ListView">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+</ResourceDictionary>

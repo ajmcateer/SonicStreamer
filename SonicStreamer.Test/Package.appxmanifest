@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+  <Identity Name="63945AlexanderPreibisch.SonicStreamer" Publisher="CN=141DC0BE-8183-47DF-9FFA-3EAE930B2404" Version="1.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="655d9deb-1890-4201-b48b-d589d342e5a5" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Properties>
+    <DisplayName>SonicStreamer</DisplayName>
+    <PublisherDisplayName>Alexander Preibisch</PublisherDisplayName>
+    <Logo>Assets\TestStoreLogo.png</Logo>
+  </Properties>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="vstest.executionengine.universal.App" Executable="$targetnametoken$.exe" EntryPoint="SonicStreamer.Test.App">
+      <uap:VisualElements DisplayName="SonicStreamer" Square150x150Logo="Assets\TestSquare150x150Logo.png" Square44x44Logo="Assets\TestSquare44x44Logo.png" Description="SonicStreamer.Test" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\TestWide310x150Logo.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="wide310x150Logo" />
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\TestSplashScreen.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
