@@ -692,11 +692,10 @@ namespace SonicStreamer.Subsonic.Server
 #if DEBUG
             return true;
 #else
-            List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
-            param.Add(new KeyValuePair<string, string>("id", trackID));
-            CustomXmlReader xml = (await getXmlFromServer("scrobble", param)).Item1;
+            var param = new List<KeyValuePair<string, string>> {new KeyValuePair<string, string>("id", trackId)};
+            var xml = (await GetXmlFromServer("scrobble", param)).Item1;
 
-            return xml != null ? true : false;
+            return xml != null;
 #endif
         }
 
