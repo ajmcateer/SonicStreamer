@@ -1,4 +1,4 @@
-### 2.4 Build xxxx (2017-xx-xx)
+### 2.4 Build 6276 (2017-03-08)
 
 * [New]: MusicBrainz Support
 * [New]: Settings Page shows now the size of the local track cache
