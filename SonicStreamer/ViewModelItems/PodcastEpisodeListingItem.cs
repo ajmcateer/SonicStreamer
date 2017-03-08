@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Windows.UI.Xaml;
 
 namespace SonicStreamer.ViewModelItems
@@ -36,7 +37,7 @@ namespace SonicStreamer.ViewModelItems
         }
 
         private string _expandButtonSymbol;
-
+        [XmlIgnore]
         public string ExpandButtonSymbol
         {
             get { return _expandButtonSymbol; }
@@ -45,9 +46,9 @@ namespace SonicStreamer.ViewModelItems
 
         #endregion
 
-        public PodcastEpisodeListingItem(PodcastEpisode episode) : this(episode, false)
-        {
-        }
+        public PodcastEpisodeListingItem() { }
+
+        public PodcastEpisodeListingItem(PodcastEpisode episode) : this(episode, false) { }
 
         public PodcastEpisodeListingItem(PodcastEpisode episode, bool isExpand)
         {

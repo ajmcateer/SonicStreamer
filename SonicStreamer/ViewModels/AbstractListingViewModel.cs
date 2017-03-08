@@ -30,7 +30,7 @@ namespace SonicStreamer.ViewModels
         public bool IsLoading
         {
             get { return _isLoading; }
-            set { Set(ref IsLoaded, value); }
+            set { Set(ref _isLoading, value); }
         }
 
         private int _loadingCount;
