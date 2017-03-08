@@ -81,6 +81,14 @@
                             Style="{StaticResource OrangeTitleTextBlockStyle}"
                             Text="information" />
                         <HyperlinkButton
+                            Content="source code on gitlab"
+                            Foreground="Orange"
+                            NavigateUri="https://gitlab.com/Axelander/SonicStreamer" />
+                        <HyperlinkButton
+                            Content="license"
+                            Foreground="Orange"
+                            NavigateUri="https://gitlab.com/Axelander/SonicStreamer/blob/master/LICENSE" />
+                        <HyperlinkButton
                             Content="privacy policy"
                             Foreground="Orange"
                             NavigateUri="http://axelander.net/?page_id=41" />
