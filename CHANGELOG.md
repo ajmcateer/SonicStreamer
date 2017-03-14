@@ -1,3 +1,6 @@
+### 2.4 Build 6282 (2017-03-14)
+* [Fixed]: Unable to connect to server in the local network
+
 ### 2.4 Build 6276 (2017-03-08)
 
 * [New]: MusicBrainz Support
@@ -33,7 +36,7 @@
 * [Changed]: AppBarButton labels can now be displayed
 * [Changed]: Correct server API version is now used for all requests
 * [Changed]: App version also now use increasing Build numbers
-* [Fixed]: Incresed size for bit rates; in the past text was truncated for large numbers especially for FLAC files
+* [Fixed]: Increased size for bit rates; in the past text was truncated for large numbers especially for FLAC files
 
 ### 2.2.0 (2016-09-28)
 
@@ -114,7 +117,7 @@ Windows Phone:
 * [New]: Start Page has now two new sections (most played, frequent played)
 * [New]: LastFM Section which shows some information about the artist
 * [New]: Login Page: Pressing Enter in password box starts connection process
-* [New]: Seach Page: Pressing Enter in search box starts search
+* [New]: Search Page: Pressing Enter in search box starts search
 * [Changed]: Optimized Views for dynamic screen resolution
 * [Changed]: New Icon in Folder Browser
 * [Changed]: Snapped Player in expanded mode is now integrated in views (Player is no longer an overlay)
