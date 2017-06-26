@@ -15,14 +15,5 @@ namespace SonicStreamer.Subsonic.Data
         }
 
         #endregion
-
-        public Track() : base()
-        {
-        }
-
-        public Track(MediaPlaybackItem playbackItem) : base(playbackItem)
-        {
-            TrackNr = playbackItem.GetDisplayProperties().MusicProperties.TrackNumber.ToString();
-        }
     }
 }

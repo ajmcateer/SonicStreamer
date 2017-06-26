@@ -20,6 +20,10 @@
         public const string ContainerLogin = "LoginSettings";
         public const string SettingServerType = "ServerType";
 
+        // LocalSettings
+        public const string CacheFileName = "cache.json";
+        public const string TrackCacheFolder = "tracks";
+
         // MusicBrainz
 
         public const string MusicBrainzArtistQueryParams =
@@ -48,5 +52,6 @@
         public const string PlaybackAlbumId = "albumId";
         public const string PlaybackCover = "cover";
         public const string PlaybackDuration = "duration";
+        public const string PlaybackDurationOutput = "durationOutput";
     }
 }

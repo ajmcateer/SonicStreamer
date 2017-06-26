@@ -171,11 +171,11 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid Margin="5,0">
                                         <Image Source="ms-appx:///Assets/cover.png" />
-                                        <Image Canvas.ZIndex="1" Source="{Binding CurrentTrack.Cover.Uri}" />
+                                        <Image Canvas.ZIndex="1" Source="{Binding PlaybackCurrentTrack.Source.CustomProperties[cover]}" />
                                     </Grid>
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding CurrentTrack.Name}" />
-                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding CurrentTrack.Artist}" />
+                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[name]}" />
+                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[artist]}" />
                                     </StackPanel>
                                 </Grid>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -203,11 +203,11 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid Margin="5,0">
                                         <Image Source="ms-appx:///Assets/cover.png" />
-                                        <Image Canvas.ZIndex="1" Source="{Binding CurrentTrack.Cover.Uri}" />
+                                        <Image Canvas.ZIndex="1" Source="{Binding PlaybackCurrentTrack.Source.CustomProperties[cover]}" />
                                     </Grid>
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding CurrentTrack.Name}" />
-                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding CurrentTrack.Artist}" />
+                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[name]}" />
+                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[artist]}" />
                                     </StackPanel>
                                 </Grid>
                                 <Grid
@@ -342,11 +342,11 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid Margin="5,0">
                                         <Image Source="ms-appx:///Assets/cover.png" />
-                                        <Image Canvas.ZIndex="1" Source="{Binding CurrentTrack.Cover.Uri}" />
+                                        <Image Canvas.ZIndex="1" Source="{Binding PlaybackCurrentTrack.Source.CustomProperties[cover]}" />
                                     </Grid>
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding CurrentTrack.Name}" />
-                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding CurrentTrack.Artist}" />
+                                        <TextBlock Style="{StaticResource OrangeItemTitleTextBlockStyle}" Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[name]}" />
+                                        <TextBlock Style="{StaticResource OrangeItemSubtitleTextBlockStyle}" Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[artist]}" />
                                     </StackPanel>
                                 </Grid>
                                 <Grid

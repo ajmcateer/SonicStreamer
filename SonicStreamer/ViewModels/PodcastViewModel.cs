@@ -169,7 +169,7 @@ namespace SonicStreamer.ViewModels
             foreach (
                 var episode in await SubsonicConnector.Current.CurrentConnection.GetPodcastEpisodesAsync(SelectedPodcast.Id))
             {
-                episode.CheckLocalFile();
+                episode.SetStatus();
                 SelectedPodcast.Episodes.Add(episode);
             }
             SetEpisodesForSelectedPodcast();
@@ -281,23 +281,23 @@ namespace SonicStreamer.ViewModels
         /// <summary>
         /// Bindable Methode um alle verfügabren Episoden des ausgewählten Podcast abzuspielen. Die existierende Wiedergabe wird ersetzt
         /// </summary>
-        public async void PlayPodcastClick()
+        public void PlayPodcastClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                 "PlayPodcastClick"));
             var episodes = AvailableEpisodes.Select(item => item.Episode).ToList();
-            await PlaybackService.Current.AddToPlaybackAsync(episodes);
+            PlaybackService.Current.AddToPlaybackAsync(episodes);
         }
 
         /// <summary>
         /// Bindable Methode um alle verfügabren Episoden des ausgewählten Podcast zur Wiedergabe hinzuzufügen.
         /// </summary>
-        public async void AddPodcastClick()
+        public void AddPodcastClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                 "AddPodcastClick"));
             var episodes = AvailableEpisodes.Select(item => item.Episode).ToList();
-            await PlaybackService.Current.AddToPlaybackAsync(episodes, false);
+            PlaybackService.Current.AddToPlaybackAsync(episodes, false);
         }
 
         /// <summary>
