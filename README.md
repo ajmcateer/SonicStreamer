@@ -11,6 +11,14 @@ The whole app uses the [Model–view–view-model (MVVM) pattern](https://en.wik
 
 The following 3rd party libraries are used:
 
+### Json.NET Schema
+
+Json.NET Schema is a powerful, complete and easy to use JSON Schema framework for .NET
+
+- Author: [Newtonsoft](http://www.newtonsoft.com/)
+- Source: [GitHub](https://github.com/JamesNK/Newtonsoft.Json.Schema)
+- License: [GNU Affero General Public License Version 3](http://www.gnu.org/licenses/agpl-3.0.html)
+
 ### MusicBrainz
 
 C# library which implements the MusicBrainz API.
@@ -19,10 +27,10 @@ C# library which implements the MusicBrainz API.
 - Source: [GitHub](https://github.com/avatar29A)
 - License: [The MIT License (MIT)](https://github.com/avatar29A/MusicBrainz/blob/master/LICENSE.txt)
 
-### Json.NET Schema
+### UWP Community Toolkit
 
-Json.NET Schema is a powerful, complete and easy to use JSON Schema framework for .NET
+The UWP Community Toolkit is a collection of helper functions, custom controls, and app services. It simplifies and demonstrates common developer tasks building UWP apps for Windows 10. The toolkit is part of the .NET Foundation.
 
-- Author: [Newtonsoft](http://www.newtonsoft.com/)
-- Source: [GitHub](https://github.com/JamesNK/Newtonsoft.Json.Schema)
-- License: [GNU Affero General Public License Version 3](http://www.gnu.org/licenses/agpl-3.0.html)
+- Author: [.NET Foundation and Contributors](https://github.com/Microsoft/UWPCommunityToolkit)
+- Source: [GitHub](https://github.com/Microsoft/UWPCommunityToolkit)
+- License: [The MIT License (MIT)](https://github.com/Microsoft/UWPCommunityToolkit/blob/master/license.md)
