@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Class="SonicStreamer.Controls.ArtistInfoPanels.ArtistTagsPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="using:SonicStreamer.Common"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wrapPanel="using:Microsoft.Toolkit.Uwp.UI.Controls.WrapPanel"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/ListViewStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <common:BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Visibility="{Binding HasTags, Converter={StaticResource BoolToVis}}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource InfoSectionHeaderTextBlockStyle}" Text="Tags" />
+        <GridView
+            Grid.Row="1"
+            IsItemClickEnabled="True"
+            ItemsSource="{Binding Tags}"
+            SelectionMode="None">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock
+                            Margin="15,10"
+                            Style="{StaticResource InfoTextBlockStyle}"
+                            Text="{Binding Name}" />
+                        <Ellipse
+                            RenderTransformOrigin="0.5,0"
+                            Stroke="Orange"
+                            StrokeThickness="2.5" />
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Padding" Value="5" />
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <wrapPanel:WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:CallMethodAction MethodName="TagClick" TargetObject="{Binding Mode=OneWay}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </GridView>
+    </Grid>
+</UserControl>

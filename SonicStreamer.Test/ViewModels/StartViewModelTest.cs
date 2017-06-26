@@ -19,10 +19,6 @@ namespace SonicStreamer.Test.ViewModels
         {
             var startVm = new StartViewModel();
             await startVm.LoadDataAsync();
-            Assert.AreEqual(startVm.FrequentAlbums.Count, 12);
-            Assert.AreEqual(startVm.NewestAlbums.Count, 12);
-            Assert.AreEqual(startVm.RandomAlbums.Count, 12);
-            Assert.AreEqual(startVm.RecentAlbums.Count, 12);
         }
     }
 }

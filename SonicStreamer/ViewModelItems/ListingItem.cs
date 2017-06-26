@@ -221,7 +221,7 @@ namespace SonicStreamer.ViewModelItems
         /// </summary>
         public async Task PlayAsync()
         {
-             PlaybackService.Current.AddToPlaybackAsync(await GetTracksAsync());
+            PlaybackService.Current.AddToPlaybackAsync(await GetTracksAsync());
         }
 
         /// <summary>

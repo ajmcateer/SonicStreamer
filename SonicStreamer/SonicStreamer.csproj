@@ -125,17 +125,36 @@
     <Compile Include="Controls\AddToPlaylistDialog.xaml.cs">
       <DependentUpon>AddToPlaylistDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ArtistInfoPanels\ArtistBiographyPanel.xaml.cs">
+      <DependentUpon>ArtistBiographyPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ArtistInfoPanels\ArtistGeneralInfoPanel.xaml.cs">
+      <DependentUpon>ArtistGeneralInfoPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ArtistInfoPanels\ArtistSocialLinksPanel.xaml.cs">
+      <DependentUpon>ArtistSocialLinksPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ArtistInfoPanels\ArtistTagsPanel.xaml.cs">
+      <DependentUpon>ArtistTagsPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ArtistInfoView.xaml.cs">
       <DependentUpon>ArtistInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MobilePlaybackView.xaml.cs">
       <DependentUpon>MobilePlaybackView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SectionViews\AlbumListsSectionView.xaml.cs">
+      <DependentUpon>AlbumListsSectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SectionViews\ArtistSectionView.xaml.cs">
+      <DependentUpon>ArtistSectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SectionViews\PinnedAlbumsSectionView.xaml.cs">
+      <DependentUpon>PinnedAlbumsSectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SimilarArtistsView.xaml.cs">
       <DependentUpon>SimilarArtistsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WrapGrid\OrientedSize.cs" />
-    <Compile Include="Controls\WrapGrid\WrapPanel.cs" />
     <Compile Include="LastFM\Data\LastFMAlbum.cs" />
     <Compile Include="LastFM\Data\LastFMArtist.cs" />
     <Compile Include="LastFM\Data\LastFMImage.cs" />
@@ -235,6 +254,10 @@
     <Compile Include="ViewModelItems\GroupedFolderCollection.cs" />
     <Compile Include="ViewModelItems\ListingItem.cs" />
     <Compile Include="ViewModelItems\PodcastEpisodeListingItem.cs" />
+    <Compile Include="ViewModelItems\Sections\AlbumListsSection.cs" />
+    <Compile Include="ViewModelItems\Sections\ArtistSection.cs" />
+    <Compile Include="ViewModelItems\Sections\BaseSection.cs" />
+    <Compile Include="ViewModelItems\Sections\PinnedAlbumsSection.cs" />
     <Compile Include="ViewModelItems\TrackListingItem.cs" />
     <Compile Include="ViewModels\AbstractListingViewModel.cs" />
     <Compile Include="ViewModels\AlbumsViewModel.cs" />
@@ -262,6 +285,7 @@
     <Content Include="Assets\folder.png" />
     <Content Include="Assets\LoginPage Logo.png" />
     <Content Include="Assets\logo.png" />
+    <Content Include="Assets\Secrets.user" />
     <Content Include="Assets\SocialIcons\Apple.png" />
     <Content Include="Assets\SocialIcons\Bandcamp.png" />
     <Content Include="Assets\SocialIcons\Facebook.png" />
@@ -329,6 +353,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ArtistInfoPanels\ArtistBiographyPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ArtistInfoPanels\ArtistGeneralInfoPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ArtistInfoPanels\ArtistSocialLinksPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ArtistInfoPanels\ArtistTagsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ArtistInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -336,6 +376,23 @@
     <Page Include="Controls\MobilePlaybackView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SectionViews\AlbumListsSectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SectionViews\ArtistSectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SectionViews\PinnedAlbumsSectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\SectionStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Controls\SimilarArtistsView.xaml">
       <SubType>Designer</SubType>

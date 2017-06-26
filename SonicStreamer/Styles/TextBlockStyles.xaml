@@ -1,6 +1,4 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="SelectedColor" Color="#FF965000" />
     <!--<SolidColorBrush x:Key="SelectedPointerOverColor" Color="#CCFFA500"/>
@@ -8,40 +6,61 @@
     <SolidColorBrush x:Key="SelectedPointerOverColor" Color="#CC965000" />
     <SolidColorBrush x:Key="SelectedPressedColor" Color="#E5965000" />
 
-    <Style x:Key="OrangeHeaderTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlockStyle}">
+    <Style
+        x:Key="OrangeHeaderTextBlockStyle"
+        BasedOn="{StaticResource HeaderTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
     </Style>
 
-    <Style x:Key="OrangeSubHeaderTextBlockStyle" TargetType="TextBlock"
-           BasedOn="{StaticResource SubheaderTextBlockStyle}">
+    <Style
+        x:Key="OrangeSubHeaderTextBlockStyle"
+        BasedOn="{StaticResource SubheaderTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
     </Style>
 
-    <Style x:Key="OrangeTitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource TitleTextBlockStyle}">
+    <Style
+        x:Key="OrangeTitleTextBlockStyle"
+        BasedOn="{StaticResource TitleTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
     </Style>
 
-    <Style x:Key="OrangeSubtitleTextBlockStyle" TargetType="TextBlock"
-           BasedOn="{StaticResource SubtitleTextBlockStyle}">
+    <Style
+        x:Key="OrangeSubtitleTextBlockStyle"
+        BasedOn="{StaticResource SubtitleTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
         <Setter Property="MaxLines" Value="2" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     </Style>
 
-    <Style x:Key="OrangeBaseTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+    <Style
+        x:Key="OrangeBaseTextBlockStyle"
+        BasedOn="{StaticResource BaseTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
     </Style>
 
-    <Style x:Key="OrangeBodyTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+    <Style
+        x:Key="OrangeBodyTextBlockStyle"
+        BasedOn="{StaticResource BodyTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
     </Style>
 
-    <Style x:Key="OrangeCaptionTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+    <Style
+        x:Key="OrangeCaptionTextBlockStyle"
+        BasedOn="{StaticResource CaptionTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
     </Style>
 
-    <Style x:Key="OrangePageHeaderTextBlockStyle" TargetType="TextBlock"
-           BasedOn="{StaticResource HeaderTextBlockStyle}">
+    <Style
+        x:Key="OrangePageHeaderTextBlockStyle"
+        BasedOn="{StaticResource HeaderTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="FontSize" Value="25" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="Orange" />
@@ -50,7 +69,7 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     </Style>
 
-    <!--Werden für Collections genutzt und dürfen nicht von OrangeStyles ableiten-->
+    <!--  Werden für Collections genutzt und dürfen nicht von OrangeStyles ableiten  -->
     <Style x:Key="ItemTitleTextBlockStyle" TargetType="TextBlock">
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="MaxLines" Value="2" />
@@ -63,12 +82,42 @@
         <Setter Property="FontSize" Value="13" />
     </Style>
 
-    <Style x:Key="OrangeItemTitleTextBlockStyle" TargetType="TextBlock"
-           BasedOn="{StaticResource ItemTitleTextBlockStyle}">
+    <Style
+        x:Key="OrangeItemTitleTextBlockStyle"
+        BasedOn="{StaticResource ItemTitleTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
     </Style>
-    <Style x:Key="OrangeItemSubtitleTextBlockStyle" TargetType="TextBlock"
-           BasedOn="{StaticResource ItemSubtitleTextBlockStyle}">
+    <Style
+        x:Key="OrangeItemSubtitleTextBlockStyle"
+        BasedOn="{StaticResource ItemSubtitleTextBlockStyle}"
+        TargetType="TextBlock">
         <Setter Property="Foreground" Value="Orange" />
+    </Style>
+
+    <!--  Section TextBlock Styles  -->
+    <Style
+        x:Key="InfoSectionHeaderTextBlockStyle"
+        BasedOn="{StaticResource OrangeSubtitleTextBlockStyle}"
+        TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="Margin" Value="0,10" />
+    </Style>
+    <Style
+        x:Key="InfoTextBlockStyle"
+        BasedOn="{StaticResource OrangeBodyTextBlockStyle}"
+        TargetType="TextBlock">
+        <Setter Property="Margin" Value="0,10" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="WrapWholeWords" />
+        <Setter Property="MaxLines" Value="2" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <Style
+        x:Key="InfoDescriptionTextBlockStyle"
+        BasedOn="{StaticResource InfoTextBlockStyle}"
+        TargetType="TextBlock">
+        <Setter Property="Width" Value="80" />
     </Style>
 </ResourceDictionary>

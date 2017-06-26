@@ -57,6 +57,7 @@ namespace SonicStreamer
 #endif
 
             await CreateRootFrameAsync(e.PreviousExecutionState, e.Arguments);
+            await Constants.Secrets.LoadDataAsync();
 
             // Sicherstellen, dass das aktuelle Fenster aktiv ist
             Window.Current.Activate();

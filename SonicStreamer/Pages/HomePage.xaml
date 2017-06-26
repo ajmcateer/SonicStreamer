@@ -4,54 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{StaticResource StartVM}"
     mc:Ignorable="d">
 
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ms-appx:///Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/PivotStyles.xaml" />
                 <ResourceDictionary Source="ms-appx:///Styles/SplitViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/SectionStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="HubSectionHeaderTemplate">
+                <TextBlock Foreground="Orange" Text="{Binding Title}" />
+            </DataTemplate>
             <Style TargetType="Hub">
                 <Setter Property="Foreground" Value="Orange" />
-            </Style>
-            <DataTemplate x:Key="AlbumItemTemplate">
-                <Grid
-                    Width="140"
-                    Height="140"
-                    HorizontalAlignment="Center">
-                    <Grid>
-                        <Image Source="ms-appx:///Assets/cover.png" />
-                        <Image Canvas.ZIndex="1" Source="{Binding Cover.Uri}" />
-                    </Grid>
-                    <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
-                        <TextBlock
-                            Height="40"
-                            Margin="15,0,15,0"
-                            Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}"
-                            Style="{StaticResource BodyTextBlockStyle}"
-                            Text="{Binding Name}" />
-                        <TextBlock
-                            Margin="15,0,15,10"
-                            Foreground="{ThemeResource ListViewItemOverlaySecondaryForegroundThemeBrush}"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Text="{Binding Artist}"
-                            TextWrapping="NoWrap" />
-                    </StackPanel>
-                </Grid>
-            </DataTemplate>
-            <ItemsPanelTemplate x:Key="HorizontalItemsPanel">
-                <ItemsWrapGrid MaximumRowsOrColumns="2" Orientation="Horizontal" />
-            </ItemsPanelTemplate>
-            <ItemsPanelTemplate x:Key="VerticalItemsPanel">
-                <ItemsWrapGrid Orientation="Vertical" />
-            </ItemsPanelTemplate>
-            <Style x:Name="SectionGridViewStyle" TargetType="GridView">
-                <Setter Property="ItemTemplate" Value="{StaticResource AlbumItemTemplate}" />
-                <Setter Property="ItemsPanel" Value="{StaticResource VerticalItemsPanel}" />
-                <Setter Property="IsSwipeEnabled" Value="False" />
-                <Setter Property="IsItemClickEnabled" Value="True" />
-                <Setter Property="SelectionMode" Value="None" />
             </Style>
         </ResourceDictionary>
     </Page.Resources>
@@ -71,148 +39,7 @@
                 <TextBlock Style="{StaticResource OrangePageHeaderTextBlockStyle}" Text="home" />
             </StackPanel>
         </Grid>
-        <Hub Grid.Row="1" DataContext="{Binding Source={StaticResource StartVM}}">
-            <HubSection>
-                <HubSection.Header>
-                    <TextBlock Foreground="Orange" Text="random albums" />
-                </HubSection.Header>
-                <DataTemplate>
-                    <UserControl>
-                        <GridView
-                            x:Name="RandomAlbumsGridView"
-                            ItemClick="ItemView_ItemClick"
-                            ItemsSource="{Binding RandomAlbums}"
-                            Style="{StaticResource SectionGridViewStyle}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="0" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="RandomAlbumsGridView.ItemsPanel" Value="{StaticResource HorizontalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="500" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="RandomAlbumsGridView.ItemsPanel" Value="{StaticResource VerticalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </GridView>
-                    </UserControl>
-                </DataTemplate>
-            </HubSection>
-            <HubSection>
-                <HubSection.Header>
-                    <TextBlock Foreground="Orange" Text="recently played" />
-                </HubSection.Header>
-                <DataTemplate>
-                    <UserControl>
-                        <GridView
-                            x:Name="RecentAlbumsGridView"
-                            ItemClick="ItemView_ItemClick"
-                            ItemsSource="{Binding RecentAlbums}"
-                            Style="{StaticResource SectionGridViewStyle}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="0" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="RecentAlbumsGridView.ItemsPanel" Value="{StaticResource HorizontalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="500" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="RecentAlbumsGridView.ItemsPanel" Value="{StaticResource VerticalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </GridView>
-                    </UserControl>
-                </DataTemplate>
-            </HubSection>
-            <HubSection>
-                <HubSection.Header>
-                    <TextBlock Foreground="Orange" Text="most played" />
-                </HubSection.Header>
-                <DataTemplate>
-                    <UserControl>
-                        <GridView
-                            x:Name="FrequentAlbumsGridView"
-                            ItemClick="ItemView_ItemClick"
-                            ItemsSource="{Binding FrequentAlbums}"
-                            Style="{StaticResource SectionGridViewStyle}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="0" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="FrequentAlbumsGridView.ItemsPanel" Value="{StaticResource HorizontalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="500" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="FrequentAlbumsGridView.ItemsPanel" Value="{StaticResource VerticalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </GridView>
-                    </UserControl>
-                </DataTemplate>
-            </HubSection>
-            <HubSection>
-                <HubSection.Header>
-                    <TextBlock Foreground="Orange" Text="newest" />
-                </HubSection.Header>
-                <DataTemplate>
-                    <UserControl>
-                        <GridView
-                            x:Name="NewestAlbumsGridView"
-                            ItemClick="ItemView_ItemClick"
-                            ItemsSource="{Binding NewestAlbums}"
-                            Style="{StaticResource SectionGridViewStyle}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="0" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="NewestAlbumsGridView.ItemsPanel" Value="{StaticResource HorizontalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState>
-                                        <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="500" />
-                                        </VisualState.StateTriggers>
-                                        <VisualState.Setters>
-                                            <Setter Target="NewestAlbumsGridView.ItemsPanel" Value="{StaticResource VerticalItemsPanel}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </GridView>
-                    </UserControl>
-                </DataTemplate>
-            </HubSection>
-        </Hub>
+        <Pivot x:Name="HomePivot" Grid.Row="1" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>

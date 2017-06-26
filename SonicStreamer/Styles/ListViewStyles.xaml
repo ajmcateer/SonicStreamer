@@ -378,6 +378,32 @@
         <Setter Property="Padding" Value="12" />
     </Style>
 
+    <DataTemplate x:Key="AlbumTileItemTemplate">
+        <Grid
+            Width="140"
+            Height="140"
+            HorizontalAlignment="Center">
+            <Grid>
+                <Image Source="ms-appx:///Assets/cover.png" />
+                <Image Canvas.ZIndex="1" Source="{Binding Cover.Uri}" />
+            </Grid>
+            <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+                <TextBlock
+                    Height="40"
+                    Margin="15,0,15,0"
+                    Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    Text="{Binding Name}" />
+                <TextBlock
+                    Margin="15,0,15,10"
+                    Foreground="{ThemeResource ListViewItemOverlaySecondaryForegroundThemeBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{Binding Artist}"
+                    TextWrapping="NoWrap" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
     <DataTemplate x:Key="TrackListItemTemplate">
         <UserControl>
             <Grid>
@@ -647,5 +673,80 @@
                 Text="{Binding Episode.Description}"
                 Visibility="{Binding IsDescriptionVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="TweetItemTemplate">
+        <Border
+            Margin="12,0,12,12"
+            Padding="12"
+            Background="#FF151515"
+            BorderBrush="#FF565656"
+            BorderThickness="2"
+            CornerRadius="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Image
+                        Grid.RowSpan="2"
+                        Width="50"
+                        Height="50"
+                        Margin="0,0,12,0"
+                        VerticalAlignment="Top"
+                        Source="{Binding User.ProfileImageUrl}"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontWeight="SemiBold"
+                        Text="{Binding User.Name}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        FontWeight="Light"
+                        Text="{Binding User.ScreenName}" />
+                    <Image
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="2"
+                        Width="24"
+                        Height="24"
+                        VerticalAlignment="Top"
+                        Source="ms-appx:///Assets/SocialIcons/Twitter.png"
+                        Stretch="Uniform" />
+                </Grid>
+                <TextBlock
+                    Grid.Row="1"
+                    FontWeight="SemiBold"
+                    Text="{Binding Text}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="WrapWholeWords" />
+                <StackPanel
+                    Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <TextBlock FontWeight="ExtraLight" Text="{Binding CreationDate}" />
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        FontWeight="ExtraLight"
+                        Text="{Binding GeoData.DisplayCoordinates}" />
+                </StackPanel>
+                <Image Grid.Row="3" Source="{Binding Entities.Media[0].MediaUrl}" />
+            </Grid>
+        </Border>
     </DataTemplate>
 </ResourceDictionary>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SonicStreamer.ViewModelItems;
+using SonicStreamer.ViewModelItems.Sections;
 
 namespace SonicStreamer.SampleData
 {

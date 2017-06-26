@@ -1,93 +1,54 @@
-﻿using SonicStreamer.Common.System;
+﻿using System.Collections.Generic;
 using SonicStreamer.SampleData;
 using SonicStreamer.Subsonic.Data;
-using SonicStreamer.Subsonic.Server;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using SonicStreamer.Pages;
+using SonicStreamer.ViewModelItems.Sections;
 
 namespace SonicStreamer.ViewModels
 {
     /// <summary>
-    /// Startoberfläche mit einer zufälligen Auswahl von Alben
+    /// ViewModel for <see cref="HomePage"/>
     /// </summary>
     public class StartViewModel : BaseViewModel
     {
         #region Properties
 
-        public ObservableCollection<Album> RandomAlbums { get; set; }
-        public ObservableCollection<Album> RecentAlbums { get; set; }
-        public ObservableCollection<Album> FrequentAlbums { get; set; }
-        public ObservableCollection<Album> NewestAlbums { get; set; }
+        public ObservableCollection<BaseSection> Sections { get; set; }
 
         #endregion
 
         public StartViewModel()
         {
-            RandomAlbums = new ObservableCollection<Album>();
-            RecentAlbums = new ObservableCollection<Album>();
-            FrequentAlbums = new ObservableCollection<Album>();
-            NewestAlbums = new ObservableCollection<Album>();
+            Sections = new ObservableCollection<BaseSection>();
 
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                foreach (var album in SampleDataCreator.Current.CreateAlbums())
-                {
-                    RandomAlbums.Add(album);
-                    RecentAlbums.Add(album);
-                    FrequentAlbums.Add(album);
-                    NewestAlbums.Add(album);
-                }
+                //foreach (var albumSection in SampleDataCreator.Current.CreateAlbumSections())
+                //{
+                //    Sections.Add(albumSection);
+                //}
             }
         }
 
         /// <summary>
-        /// Lädt Alben für die einzelnen Sections der StartPage
+        /// Creates all Sections and loads the data
         /// </summary>
         public async Task LoadDataAsync()
         {
-            RandomAlbums.Clear();
-            RecentAlbums.Clear();
-            FrequentAlbums.Clear();
-            NewestAlbums.Clear();
+            Sections.Clear();
 
-            var albumDetermination = new List<Task<List<Album>>>();
-            var albumLists = new List<List<Album>>();
+            // Pre-Initialize Sections
+            //Sections.Add(new AlbumListsSection("album lists", 0));
+            //Sections.Add(new ArtistSection("New Found Glory", "220", "New Found Glory", 1));
+            Sections.Add(new ArtistSection("Rise Against", "214", "Rise Against", 2));
+            //Sections.Add(new PinnedAlbumsSection("pinned albums", new List<string>{"1028", "1029", "1028", "1029", "1028", "1029", "1028", "1029"}, 3));
 
-            albumDetermination.Add(
-                SubsonicConnector.Current.CurrentConnection.GetAlbumSectionAsync(
-                    BaseSubsonicConnection.AlbumListType.Random, 12));
-            albumDetermination.Add(
-                SubsonicConnector.Current.CurrentConnection.GetAlbumSectionAsync(
-                    BaseSubsonicConnection.AlbumListType.Recent, 12));
-            albumDetermination.Add(
-                SubsonicConnector.Current.CurrentConnection.GetAlbumSectionAsync(
-                    BaseSubsonicConnection.AlbumListType.Frequent, 12));
-            albumDetermination.Add(
-                SubsonicConnector.Current.CurrentConnection.GetAlbumSectionAsync(
-                    BaseSubsonicConnection.AlbumListType.Newest, 12));
-
-            albumLists.AddRange(await Task.WhenAll(albumDetermination));
-
-            foreach (var album in albumLists[0])
-            {
-                RandomAlbums.Add(album);
-            }
-
-            foreach (var album in albumLists[1])
-            {
-                RecentAlbums.Add(album);
-            }
-
-            foreach (var album in albumLists[2])
-            {
-                FrequentAlbums.Add(album);
-            }
-
-            foreach (var album in albumLists[3])
-            {
-                NewestAlbums.Add(album);
-            }
+            // Load Data in parallel for better performance
+            var loadTasks = Sections.Select(section => section.LoadDataAsync()).ToList();
+            await Task.WhenAll(loadTasks);
         }
     }
 }

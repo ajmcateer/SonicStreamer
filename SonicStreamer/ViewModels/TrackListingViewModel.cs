@@ -190,7 +190,13 @@ namespace SonicStreamer.ViewModels
                 Albums.Add(new TrackListingItem(album));
             }
             PageTitle = artist.Name;
-            ArtistInfo = await ArtistInfo.CreateAsync(artist.Id, artist.Name);
+            var activeServices = new ArtistInfo.ActiveServices
+            {
+                LastFm = true,
+                MusicBrainz = true,
+                Twitter = true
+            };
+            ArtistInfo = await ArtistInfo.CreateAsync(artist.Id, artist.Name, activeServices);
         }
 
         /// <summary>
@@ -202,7 +208,13 @@ namespace SonicStreamer.ViewModels
             var album = await SubsonicConnector.Current.CurrentConnection.GetAlbumAsync(albumId);
             Albums.Add(new TrackListingItem(album, true));
             PageTitle = album.Name;
-            ArtistInfo = await ArtistInfo.CreateAsync(album.ArtistId, album.Artist);
+            var activeServices = new ArtistInfo.ActiveServices
+            {
+                LastFm = true,
+                MusicBrainz = true,
+                Twitter = true
+            };
+            ArtistInfo = await ArtistInfo.CreateAsync(album.ArtistId, album.Artist, activeServices);
         }
 
         public async Task SaveViewModelAsync(string savename)

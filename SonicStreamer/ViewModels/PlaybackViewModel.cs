@@ -199,10 +199,14 @@ namespace SonicStreamer.ViewModels
         private async Task SetCurrentTrackAsync()
         {
             PlaybackCurrentTrack = PlaybackService.Current.Playback.CurrentItem;
+            var activeServices = new ArtistInfo.ActiveServices
+            {
+                LastFm = true, MusicBrainz = true, Twitter = true
+            };
             CurrentArtistInfo =
                 await ArtistInfo.CreateAsync(
                     PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtistId] as string,
-                PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtist] as string);
+                PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtist] as string, activeServices);
         }
 
         protected virtual void Dispose(bool disposing)

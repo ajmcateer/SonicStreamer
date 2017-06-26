@@ -1,4 +1,9 @@
-﻿namespace SonicStreamer.Common.System
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Windows.Storage;
+
+namespace SonicStreamer.Common.System
 {
     public static class Constants
     {
@@ -53,5 +58,46 @@
         public const string PlaybackCover = "cover";
         public const string PlaybackDuration = "duration";
         public const string PlaybackDurationOutput = "durationOutput";
+
+        public static class Secrets
+        {
+            public static string TwitterConsumerKey;
+            public static string TwitterConsumerSecret;
+            public static string TwitterCallback;
+            public static string LastfmApiKey;
+
+            public static async Task LoadDataAsync()
+            {
+                var assetFolder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                var secretFile = await assetFolder.GetFileAsync("Secrets.user");
+                foreach (var line in await FileIO.ReadLinesAsync(secretFile))
+                {
+                    if (line.StartsWith("TWITTER_CONSUMER_KEY"))
+                    {
+                        var lineData = line.Split('=');
+                        TwitterConsumerKey = lineData[1];
+                        continue;
+                    }
+                    if (line.StartsWith("TWITTER_CONSUMER_SECRET"))
+                    {
+                        var lineData = line.Split('=');
+                        TwitterConsumerSecret = lineData[1];
+                        continue;
+                    }
+                    if (line.StartsWith("TWITTER_CALLBACK"))
+                    {
+                        var lineData = line.Split('=');
+                        TwitterCallback = lineData[1];
+                        continue;
+                    }
+                    if (line.StartsWith("LASTFM_API_KEY"))
+                    {
+                        var lineData = line.Split('=');
+                        LastfmApiKey = lineData[1];
+                        continue;
+                    }
+                }
+            }
+        }
     }
 }

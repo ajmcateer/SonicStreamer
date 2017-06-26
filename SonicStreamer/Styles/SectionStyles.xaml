@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sectionViews="using:SonicStreamer.Controls.SectionViews">
+
+    <DataTemplate x:Key="AlbumListsSectionTemplate">
+        <Frame>
+            <sectionViews:AlbumListsSectionView />
+        </Frame>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ArtistSectionTemplate">
+        <Frame>
+            <sectionViews:ArtistSectionView />
+        </Frame>
+    </DataTemplate>
+
+    <DataTemplate x:Key="PinnedAlbumsSectionTemplate">
+        <Frame>
+            <sectionViews:PinnedAlbumsSectionView />
+        </Frame>
+    </DataTemplate>
+
+</ResourceDictionary>

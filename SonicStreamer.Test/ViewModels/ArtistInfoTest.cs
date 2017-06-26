@@ -19,7 +19,13 @@ namespace SonicStreamer.Test.ViewModels
         [TestMethod]
         public async Task CreateArtistInfoTestAsync()
         {
-            var firstArtistTest = await ArtistInfo.CreateAsync("23", "The Dada Weatherman", new FakeDispatcherWrapper());
+            var activeServices = new ArtistInfo.ActiveServices
+            {
+                LastFm = true,
+                MusicBrainz = true,
+                Twitter = true
+            };
+            var firstArtistTest = await ArtistInfo.CreateAsync("23", "The Dada Weatherman", activeServices, new FakeDispatcherWrapper());
             Assert.AreEqual("The Dada Weatherman", firstArtistTest.Name);
             Assert.AreEqual("cb974849-8230-483f-869e-643528bb3565", firstArtistTest.Mbid);
             Assert.IsTrue(firstArtistTest.HasBiography);
@@ -53,7 +59,7 @@ namespace SonicStreamer.Test.ViewModels
             }
 
             // Test Artist with SubsonicSimilarArtists
-            var secondArtistTest = await ArtistInfo.CreateAsync("12", "Antígona", new FakeDispatcherWrapper());
+            var secondArtistTest = await ArtistInfo.CreateAsync("12", "Antígona", activeServices, new FakeDispatcherWrapper());
             Assert.AreEqual(3, secondArtistTest.SubsonicSimilarArtists.Count);
             foreach (var subsonicSimilarArtist in secondArtistTest.SubsonicSimilarArtists)
             {

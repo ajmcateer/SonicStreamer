@@ -12,8 +12,6 @@ namespace SonicStreamer.LastFM.Server
 {
     public class LastFmConnection : BaseXmlServerConnection
     {
-        private const string LastfmApiKey = "9284f6d4293182e442db5d86a73d3de4";
-
         #region BaseServerConnection Implementation
 
         /// <summary>
@@ -23,7 +21,7 @@ namespace SonicStreamer.LastFM.Server
         /// <param name="param">Zu übergebene Parameter</param>
         public override string GetApiMethodUri(string method, List<KeyValuePair<string, string>> param)
         {
-            var result = string.Format("http://ws.audioscrobbler.com/2.0/?api_key={0}&method={1}", LastfmApiKey, method);
+            var result = string.Format("http://ws.audioscrobbler.com/2.0/?api_key={0}&method={1}", Constants.Secrets.LastfmApiKey, method);
             return param.Aggregate(result, (current, item) => current + $"&{item.Key}={item.Value}");
         }
 
