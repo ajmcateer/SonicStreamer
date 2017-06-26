@@ -3,12 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Windows.ApplicationModel.Core;
-using Windows.Media.Playback;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
-using Windows.UI.Core;
-using SonicStreamer.Common.Extension;
 
 namespace SonicStreamer.Subsonic.Data
 {
@@ -145,32 +141,16 @@ namespace SonicStreamer.Subsonic.Data
                 }
             }
         }
-        
-        private IDispatcherWrapper _dispatcherWrapper;
 
         public SubsonicPlayableObject()
         {
             Status = PlayableObjectStatus.Online;
         }
 
-        public SubsonicPlayableObject(MediaPlaybackItem playbackItem) : this()
-        {
-            Id = playbackItem.Source.CustomProperties[Constants.PlaybackTrackId] as string;
-            ArtistId = playbackItem.Source.CustomProperties[Constants.PlaybackArtistId] as string;
-            Cover = playbackItem.Source.CustomProperties[Constants.PlaybackCover] as CoverArt;
-            Duration = playbackItem.Source.CustomProperties[Constants.PlaybackDuration] as string;
-            Name = playbackItem.GetDisplayProperties().MusicProperties.Title;
-            Artist = playbackItem.GetDisplayProperties().MusicProperties.Artist;
-            Album = playbackItem.GetDisplayProperties().MusicProperties.AlbumTitle;
-        }
-
         /// <summary>
-        /// Baut die Uri zumsammen, um das <see cref="SubsonicPlayableObject"/> zu streamen
+        /// Creates and returns an <see cref="Uri"/> to stream the <see cref="SubsonicPlayableObject"/>.
+        /// If the <see cref="SubsonicPlayableObject"/> has no Id it returns null.
         /// </summary>
-        /// <returns>
-        /// Uri Adresse zum Streamen des <see cref="SubsonicPlayableObject"/>. 
-        /// Hat das <see cref="SubsonicPlayableObject"/> keine ID wird null zurückgegeben.
-        /// </returns>
         public Uri GetStreamUri()
         {
             if (Id == null) return null;
@@ -179,50 +159,47 @@ namespace SonicStreamer.Subsonic.Data
         }
 
         /// <summary>
+        /// Checks if the Id is listed in the Cache Pool and sets the <see cref="Status"/> property
+        /// </summary>
+        public void SetStatus()
+        {
+            if (!PlaybackService.Current.CachedPlayableObjects.TryGetValue(Id, out string path))
+                Status = PlayableObjectStatus.Online;
+            if (path == Path)
+            {
+                Status = PlayableObjectStatus.Offline;
+            }
+            else
+            {
+                // Inconsistent Data - Either File was moved Id has been changed on server
+                PlaybackService.Current.CachedPlayableObjects.Remove(Id);
+                Status = PlayableObjectStatus.Online;
+            }
+            // TODO Check if Files really exists in background
+        }
+
+        /// <summary>
+        /// Checks if the local file still really exists
+        /// </summary>
+        public async Task CheckStatusAsync()
+        {
+            if (Status == PlayableObjectStatus.Online) return;
+            if (await IsLocalFileAvailableAsync()) return;
+            PlaybackService.Current.CachedPlayableObjects.Remove(Id);
+            Status = PlayableObjectStatus.Online;
+        }
+
+        /// <summary>
         /// Gibt die Uri des <see cref="SubsonicPlayableObject"/> zum Streamen oder für die lokale Wiedergabe zurück
         /// </summary>
-        public async Task<Uri> GetSource()
+        public Uri GetSource()
         {
-            await CheckLocalFileAsync();
-            if (Status != PlayableObjectStatus.Offline) return GetStreamUri();
-            var result = GetLocalFilePath();
-            return result != null ? new Uri(result) : GetStreamUri();
+            return Status == PlayableObjectStatus.Offline ? new Uri(GetLocalFilePath()) : GetStreamUri();
         }
 
         #region Cache Handling
 
-        /// <summary>
-        /// Prüft, ob das <see cref="SubsonicPlayableObject"/> im LocalFolder vorhanden ist.
-        /// </summary>
-        public void CheckLocalFile()
-        {
-            try
-            {
-                _dispatcherWrapper = new DispatcherWrapper(CoreApplication.MainView.CoreWindow.Dispatcher);
-            }
-            catch (System.Exception)
-            {
-                _dispatcherWrapper = new FakeDispatcherWrapper();
-            }
-            var startResult =
-                _dispatcherWrapper.RunAsync(
-                    async () =>
-                    {
-                        Status = await IsLocalFileAvailable()
-                            ? PlayableObjectStatus.Offline
-                            : PlayableObjectStatus.Online;
-                    });
-        }
-
-        /// <summary>
-        /// Prüft, ob das <see cref="SubsonicPlayableObject"/> im LocalFolder vorhanden ist.
-        /// </summary>
-        public async Task CheckLocalFileAsync()
-        {
-            Status = await IsLocalFileAvailable() ? PlayableObjectStatus.Offline : PlayableObjectStatus.Online;
-        }
-
-        private async Task<bool> IsLocalFileAvailable()
+        private async Task<bool> IsLocalFileAvailableAsync()
         {
             try
             {
@@ -274,13 +251,13 @@ namespace SonicStreamer.Subsonic.Data
                     {
                         if (download.RequestedUri != item.RequestedUri) continue;
                         await item.AttachAsync();
-                        CheckLocalFile();
+                        await CheckDownloadedFileAsync();
                         return;
                     }
 
                     // Starten und Prozess überwachen
                     await download.StartAsync();
-                    CheckLocalFile();
+                    await CheckDownloadedFileAsync();
                 }
                 catch (System.Exception)
                 {
@@ -306,7 +283,7 @@ namespace SonicStreamer.Subsonic.Data
         /// </summary>
         private async Task<StorageFolder> GetDestinationFolderAsync()
         {
-            var tracksFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("tracks",
+            var tracksFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(Constants.TrackCacheFolder,
                 CreationCollisionOption.OpenIfExists);
             var subFolders = Path.Split('\\');
 
@@ -316,6 +293,24 @@ namespace SonicStreamer.Subsonic.Data
                 nextFolder = await nextFolder.CreateFolderAsync(subFolders[i], CreationCollisionOption.OpenIfExists);
             }
             return nextFolder;
+        }
+
+        /// <summary>
+        /// Checks if the Download was successfully and adds Id to central Cached Pool
+        /// </summary>
+        private async Task CheckDownloadedFileAsync()
+        {
+            if (!await IsLocalFileAvailableAsync()) return;
+            try
+            {
+                PlaybackService.Current.CachedPlayableObjects.Add(Id, Path);
+            }
+            catch (ArgumentException)
+            {
+                // Cached Id already exists, update Path in Cache Pool
+                PlaybackService.Current.CachedPlayableObjects[Id] = Path;
+            }
+            Status = PlayableObjectStatus.Offline;
         }
 
         #endregion

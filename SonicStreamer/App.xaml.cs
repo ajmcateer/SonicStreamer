@@ -132,6 +132,7 @@ namespace SonicStreamer
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             var saveTasks = new List<Task>();
+            var cacheTask = PlaybackService.Current.SaveCachedObjectsAsync();
             foreach (var ressource in Current.Resources)
             {
                 var viewModel = ressource.Value as IViewModelSerializable;
@@ -141,6 +142,7 @@ namespace SonicStreamer
                 }
             }
             await Task.WhenAll(saveTasks);
+            await cacheTask;
             deferral.Complete();
         }
 

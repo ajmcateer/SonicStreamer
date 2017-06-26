@@ -48,11 +48,5 @@ namespace SonicStreamer.Subsonic.Data
         {
             EpisodeStatus = DownloadStatus.Unkown;
         }
-
-        public PodcastEpisode(MediaPlaybackItem playbackItem) : base(playbackItem)
-        {
-            Description = playbackItem.Source.CustomProperties["description"] as string;
-            EpisodeStatus = DownloadStatus.Completed;
-        }
     }
 }

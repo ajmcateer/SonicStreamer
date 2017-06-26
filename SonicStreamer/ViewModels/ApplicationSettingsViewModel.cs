@@ -79,7 +79,7 @@ namespace SonicStreamer.ViewModels
         {
             try
             {
-                var trackFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("tracks");
+                var trackFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.TrackCacheFolder);
                 var folderSize = await GetFolderSizeAsync(trackFolder);
                 TrackCacheSize = (ConvertBytesToMegabytes(folderSize)).ToString("#.000");
             }
@@ -119,33 +119,11 @@ namespace SonicStreamer.ViewModels
             IsScrobbleActivated = (boolValue != false);
         }
 
-        #region Tapped Methods
-
-        public async void HomepageTextBlock_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var webAddress = new Uri(Homepage);
-            await Windows.System.Launcher.LaunchUriAsync(webAddress);
-        }
-
-        public async void MailTextBlock_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var webAddress = new Uri(Mail);
-            await Windows.System.Launcher.LaunchUriAsync(webAddress);
-        }
-
-        public async void PolicyTextBlock_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var webAddress = new Uri(Policy);
-            await Windows.System.Launcher.LaunchUriAsync(webAddress);
-        }
-
-        #endregion
-
         public async void ClearTrackCacheClick()
         {
             var messageDialog =
                 new MessageDialog("Warning: This action will stop the current playback and delete all local tracks. " +
-                                  "Do you stil want to continue?");
+                                  "Do you still want to continue?");
             messageDialog.Commands.Add(new UICommand("Delete",
                 new UICommandInvokedHandler(DeleteTrackCacheCommandHandler)));
             messageDialog.Commands.Add(new UICommand("Cancel"));
@@ -161,9 +139,18 @@ namespace SonicStreamer.ViewModels
             playbackVm.Clear();
             try
             {
-                var trackFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("tracks");
+                var trackFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.TrackCacheFolder);
                 await trackFolder.DeleteAsync();
                 TrackCacheSize = "0";
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+            try
+            {
+                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(Constants.CacheFileName);
+                await file.DeleteAsync();
             }
             catch (Exception)
             {

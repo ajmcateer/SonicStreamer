@@ -166,12 +166,12 @@ namespace SonicStreamer.ViewModels
             {
                 foreach (var track in album.Tracks)
                 {
-                    track.CheckLocalFile();
+                    track.SetStatus();
                 }
             }
             foreach (var track in TopSongs)
             {
-                track.CheckLocalFile();
+                track.SetStatus();
             }
         }
 
@@ -345,26 +345,26 @@ namespace SonicStreamer.ViewModels
         /// <summary>
         /// Spielt die markierten Elemente ab. Die existierende Wiedergabe wird ersetzt
         /// </summary>
-        public async Task PlaySelectionAsync()
+        public void PlaySelection()
         {
-            await PlaybackService.Current.AddToPlaybackAsync(GetSelection());
+            PlaybackService.Current.AddToPlaybackAsync(GetSelection());
         }
 
         /// <summary>
         /// Fügt die markierten Elemente zur Wiedergabe hinzu
         /// </summary>
-        public async Task AddSelectionAsync()
+        public void AddSelection()
         {
-            await PlaybackService.Current.AddToPlaybackAsync(GetSelection(), false);
+            PlaybackService.Current.AddToPlaybackAsync(GetSelection(), false);
         }
 
         /// <summary>
         /// Bindable Methode um die markierten Elemente abzuspielen. Die existierende Wiedergabe wird ersetzt
         /// </summary>
-        public async void PlayClick()
+        public void PlayClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name, "PlayClick"));
-            await PlaySelectionAsync();
+            PlaySelection();
             if (SettingsVm.IsSelectionCleared)
             {
                 ClearSelection();
@@ -375,7 +375,7 @@ namespace SonicStreamer.ViewModels
         /// <summary>
         /// Bindable Methode um ein gesamtes Album abzuspielen. Die existierende Wiedergabe wird ersetzt
         /// </summary>
-        public async void PlayAlbumClick(object sender, RoutedEventArgs e)
+        public void PlayAlbumClick(object sender, RoutedEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
             if (element?.DataContext is TrackListingItem)
@@ -383,17 +383,17 @@ namespace SonicStreamer.ViewModels
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                     "PlayAlbumClick"));
                 var trackListingItem = (TrackListingItem) element.DataContext;
-                await PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks);
+                PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks);
             }
         }
 
         /// <summary>
         /// Bindable Methode um die markierten Elemente zur Wiedergabe hinzuzufügen.
         /// </summary>
-        public async void AddClick()
+        public void AddClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name, "AddClick"));
-            await AddSelectionAsync();
+            AddSelection();
             if (SettingsVm.IsSelectionCleared)
             {
                 ClearSelection();
@@ -404,7 +404,7 @@ namespace SonicStreamer.ViewModels
         /// <summary>
         /// Bindable Methode um ein gesamtes Album zur Wiedergabe hinzuzufügen.
         /// </summary>
-        public async void AddAlbumClick(object sender, RoutedEventArgs e)
+        public void AddAlbumClick(object sender, RoutedEventArgs e)
         {
             var element = e.OriginalSource as FrameworkElement;
             if (element?.DataContext is TrackListingItem)
@@ -412,7 +412,7 @@ namespace SonicStreamer.ViewModels
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                     "AddAlbumClick"));
                 var trackListingItem = (TrackListingItem) element.DataContext;
-                await PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks, false);
+                PlaybackService.Current.AddToPlaybackAsync(trackListingItem.Tracks, false);
             }
         }
 

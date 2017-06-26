@@ -50,8 +50,8 @@
                     MaxWidth="800"
                     IsItemClickEnabled="True"
                     ItemClick="{x:Bind PlaybackVm.PlaybackTracks_ItemClick}"
-                    ItemsSource="{Binding Tracks}"
-                    SelectedItem="{Binding CurrentTrack, Mode=TwoWay}"
+                    ItemsSource="{Binding PlaybackTracks}"
+                    SelectedItem="{Binding PlaybackCurrentTrack, Mode=TwoWay}"
                     SelectionChanged="PlaybackTracks_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -62,15 +62,15 @@
                                         <ColumnDefinition x:Name="ArtistColumn" Width="200" />
                                         <ColumnDefinition Width="80" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding Source.CustomProperties[name]}" TextTrimming="CharacterEllipsis" />
                                     <TextBlock
                                         Grid.Column="1"
-                                        Text="{Binding Artist}"
+                                        Text="{Binding Source.CustomProperties[artist]}"
                                         TextTrimming="CharacterEllipsis" />
                                     <TextBlock
                                         Grid.Column="2"
                                         Margin="0,0,15,0"
-                                        Text="{Binding DurationOutput}"
+                                        Text="{Binding Source.CustomProperties[durationOutput]}"
                                         TextAlignment="Right" />
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup>

@@ -1,3 +1,7 @@
+### 2.4 Build 6386 (2017-06-26)
+* [Fixed]: Performance Improvement: Changed playback creation and Track Cache checks. This should fix Crashes and Hangs for large Playlists
+* [Fixed]: Typo in message for deletion of Track Cache
+
 ### 2.4 Build 6282 (2017-03-14)
 * [Fixed]: Unable to connect to server in the local network
 
