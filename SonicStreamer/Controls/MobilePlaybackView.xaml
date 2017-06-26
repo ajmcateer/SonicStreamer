@@ -32,17 +32,17 @@
             </Grid.RowDefinitions>
             <Grid Margin="0,0,0,5">
                 <Image Source="ms-appx:///Assets/cover.png" />
-                <Image Canvas.ZIndex="1" Source="{Binding CurrentTrack.Cover.Uri}" />
+                <Image Canvas.ZIndex="1" Source="{Binding PlaybackCurrentTrack.Source.CustomProperties[cover]}" />
             </Grid>
             <StackPanel Grid.Row="1">
                 <TextBlock
                     FontWeight="SemiBold"
                     Style="{StaticResource OrangeTitleTextBlockStyle}"
-                    Text="{Binding CurrentTrack.Name}"
+                    Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[name]}"
                     TextAlignment="Center" />
                 <TextBlock
                     Style="{StaticResource OrangeSubtitleTextBlockStyle}"
-                    Text="{Binding CurrentTrack.Artist}"
+                    Text="{Binding PlaybackCurrentTrack.Source.CustomProperties[artist]}"
                     TextAlignment="Center" />
             </StackPanel>
         </Grid>

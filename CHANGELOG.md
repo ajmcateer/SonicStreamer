@@ -1,16 +1,20 @@
+### 2.4 Build 6386 (2017-06-26)
+* [Fixed]: Performance Improvement: Changed playback creation and Track Cache checks. This should fix Crashes and Hangs for large Playlists
+* [Fixed]: Typo in message for deletion of Track Cache
+
 ### 2.4 Build 6282 (2017-03-14)
 * [Fixed]: Unable to connect to server in the local network
 
 ### 2.4 Build 6276 (2017-03-08)
 
 * [New]: MusicBrainz Support
-* [New]: Settings Page shows now the size of the local track cache
-* [New]: Added links on Settings Page for license and gitlab repo
+* [New]: Settings Page shows now the size of the local track cache (issue #4)
+* [New]: Added links on Settings Page for license and gitlab repo (issue #35)
 * [Changed]: Modified and extended views with artist info
-* [Fixed]: Data loss while getting metadata of current track in playback
+* [Fixed]: Data loss while getting metadata of current track in playback (issue #36)
 * [Fixed]: Page title on detailed album view
 * [Fixed]: Newest album ordering on HomePage for mobile devices
-* [Fixed]: Missing Cover in System Media Transport Controls (SMTC)
+* [Fixed]: Missing Cover in System Media Transport Controls (SMTC) (issue #3)
 
 ### 2.3 Build 6239 (2017-01-30)
 

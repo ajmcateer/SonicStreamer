@@ -54,7 +54,7 @@ namespace SonicStreamer.ViewModelItems
         {
             Episode = episode;
             IsDescriptionVisible = isExpand;
-            Episode.CheckLocalFile();
+            Episode.SetStatus();
         }
 
         #region Setter Implementation
@@ -92,21 +92,21 @@ namespace SonicStreamer.ViewModelItems
         /// <summary>
         /// Bindable Methode um die Episode abzuspielen. Die existierende Wiedergabe wird ersetzt
         /// </summary>
-        public async void PlayEpisodeClick()
+        public void PlayEpisodeClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                 "PlayEpisodeClick"));
-            await PlaybackService.Current.AddToPlaybackAsync(Episode, true);
+            PlaybackService.Current.AddToPlaybackAsync(Episode, true);
         }
 
         /// <summary>
         /// Bindable Methode um eine Epsiode zur Wiedergabe hinzuzufügen.
         /// </summary>
-        public async void AddEpisodeClick()
+        public void AddEpisodeClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name,
                 "AddEpisodeClick"));
-            await PlaybackService.Current.AddToPlaybackAsync(Episode, false);
+            PlaybackService.Current.AddToPlaybackAsync(Episode, false);
         }
 
         /// <summary>

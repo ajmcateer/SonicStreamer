@@ -181,7 +181,7 @@ namespace SonicStreamer.ViewModels
         /// </summary>
         public async Task PlaySelectionAsync()
         {
-            await PlaybackService.Current.AddToPlaybackAsync(await GetTracksAsync());
+            PlaybackService.Current.AddToPlaybackAsync(await GetTracksAsync());
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace SonicStreamer.ViewModels
         /// </summary>
         public async Task AddSelectionAsync()
         {
-            await PlaybackService.Current.AddToPlaybackAsync(await GetTracksAsync(), false);
+            PlaybackService.Current.AddToPlaybackAsync(await GetTracksAsync(), false);
         }
 
         /// <summary>
