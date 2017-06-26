@@ -18,3 +18,11 @@ C# library which implements the MusicBrainz API.
 - Author: [avatar29A](https://github.com/avatar29A)
 - Source: [GitHub](https://github.com/avatar29A)
 - License: [The MIT License (MIT)](https://github.com/avatar29A/MusicBrainz/blob/master/LICENSE.txt)
+
+### Json.NET Schema
+
+Json.NET Schema is a powerful, complete and easy to use JSON Schema framework for .NET
+
+- Author: [Newtonsoft](http://www.newtonsoft.com/)
+- Source: [GitHub](https://github.com/JamesNK/Newtonsoft.Json.Schema)
+- License: [GNU Affero General Public License Version 3](http://www.gnu.org/licenses/agpl-3.0.html)

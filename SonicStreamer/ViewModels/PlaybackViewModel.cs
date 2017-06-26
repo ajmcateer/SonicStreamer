@@ -46,9 +46,9 @@ namespace SonicStreamer.ViewModels
             set { Set(ref _remainingDuration, value); }
         }
 
-        private double _currentTrackDuration;
+        private int _currentTrackDuration;
 
-        public double CurrentTrackDuration
+        public int CurrentTrackDuration
         {
             get { return _currentTrackDuration; }
             set { Set(ref _currentTrackDuration, value); }
@@ -109,7 +109,7 @@ namespace SonicStreamer.ViewModels
             get { return _isPlaybackPanelVisible; }
             set
             {
-                if (value == false || (CurrentTrack != null && PanelStaus != PlaybackPanelStatus.Page))
+                if (value == false || (PlaybackCurrentTrack != null && PanelStaus != PlaybackPanelStatus.Page))
                 {
                     Set(ref _isPlaybackPanelVisible, value);
                 }
@@ -128,22 +128,21 @@ namespace SonicStreamer.ViewModels
             }
         }
 
-        public ObservableCollection<SubsonicPlayableObject> Tracks { get; set; }
+        public ObservableCollection<MediaPlaybackItem> PlaybackTracks { get; private set; }
 
-        private SubsonicPlayableObject _currentTrack;
-
-        public SubsonicPlayableObject CurrentTrack
+        private MediaPlaybackItem _playbackCurrentTrack;
+        public MediaPlaybackItem PlaybackCurrentTrack
         {
-            get { return _currentTrack; }
-            set { Set(ref _currentTrack, value); }
+            get { return _playbackCurrentTrack; }
+            set { Set(ref _playbackCurrentTrack, value); }
         }
 
         public PlaybackPanelStatus PanelStaus;
 
         private DispatcherTimer _dispatcherTimer;
         private readonly IDispatcherWrapper _dispatcherWrapper;
+        private readonly ApplicationSettingsViewModel _settingsVm;
         private bool _isSliderPressed;
-        private ApplicationSettingsViewModel _settingsVm;
 
         #endregion
 
@@ -155,7 +154,7 @@ namespace SonicStreamer.ViewModels
             PanelStaus = PlaybackPanelStatus.Large;
             if (ResourceLoader.Current.GetResource(ref _settingsVm, Constants.ViewModelApplicationSettings) == false)
                 _settingsVm = new ApplicationSettingsViewModel();
-            Tracks = new ObservableCollection<SubsonicPlayableObject>();
+            PlaybackTracks = new ObservableCollection<MediaPlaybackItem>();
             IsShuffling = Convert.ToBoolean(ApplicationData.Current.RoamingSettings.Values["IsShuffling"]);
             IsRepeating = Convert.ToBoolean(ApplicationData.Current.RoamingSettings.Values["IsRepeating"]);
             PlaybackService.Current.Player.CurrentStateChanged += MediaPlayer_CurrentStateChanged;
@@ -170,26 +169,19 @@ namespace SonicStreamer.ViewModels
             }
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                foreach (var item in SampleDataCreator.Current.CreateTracks())
-                {
-                    Tracks.Add(item);
-                }
-                CurrentTrack = Tracks.First();
+                //TODO Add sample data
             }
         }
 
         public async Task LoadDataAsync()
         {
-            Tracks.Clear();
-            foreach (var item in PlaybackService.Current.GetPlaybackObjects())
+            PlaybackTracks.Clear();
+            foreach (var item in PlaybackService.Current.Playback.Items)
             {
-                Tracks.Add(new SubsonicPlayableObject(item));
+                PlaybackTracks.Add(item);
             }
-            if (PlaybackService.Current.Playback.CurrentItem != null)
-            {
-                await SetCurrentTrackAsync(
-                    PlaybackService.Current.Playback.CurrentItem.Source.CustomProperties["trackId"] as string);
-            }
+            if (PlaybackService.Current.Playback.CurrentItem != null) await SetCurrentTrackAsync();
+            await PlaybackService.Current.RestoreCachedObjectsAsync();
         }
 
         private async void Playback_CurrentItemChanged(MediaPlaybackList sender,
@@ -197,24 +189,20 @@ namespace SonicStreamer.ViewModels
         {
             await _dispatcherWrapper.RunAsync(async () =>
             {
-                if (sender.CurrentItem != null)
-                {
-                    await SetCurrentTrackAsync(sender.CurrentItem.Source.CustomProperties["trackId"] as string);
-                }
+                if (sender.CurrentItem != null) await SetCurrentTrackAsync();
             });
         }
 
         /// <summary>
-        /// Setzt den CurrentTrack anhand der übergebenen ID
+        /// Binds Current Item of the Playback to the ViewModel and creates <see cref="ArtistInfo"/> object
         /// </summary>
-        private async Task SetCurrentTrackAsync(string trackId)
+        private async Task SetCurrentTrackAsync()
         {
-            var index = Tracks.ToList().FindIndex(i => i.Id == trackId);
-            if (index != -1)
-            {
-                CurrentTrack = Tracks.ElementAt(index);
-                CurrentArtistInfo = await ArtistInfo.CreateAsync(CurrentTrack.ArtistId, CurrentTrack.Artist);
-            }
+            PlaybackCurrentTrack = PlaybackService.Current.Playback.CurrentItem;
+            CurrentArtistInfo =
+                await ArtistInfo.CreateAsync(
+                    PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtistId] as string,
+                PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtist] as string);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -296,7 +284,7 @@ namespace SonicStreamer.ViewModels
         /// <summary>
         /// Lässt den PlaybackService zum übergebenen Wiedergabeobjekt springen
         /// </summary>
-        public void Jump(SubsonicPlayableObject playbackItem)
+        public void Jump(MediaPlaybackItem playbackItem)
         {
             PlaybackService.Current.Jump(playbackItem);
         }
@@ -306,7 +294,7 @@ namespace SonicStreamer.ViewModels
         /// </summary>
         public void PlaybackTracks_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as SubsonicPlayableObject;
+            var item = e.ClickedItem as MediaPlaybackItem;
             if (item != null)
             {
                 Jump(item);
@@ -318,13 +306,13 @@ namespace SonicStreamer.ViewModels
         /// </summary>
         public void Clear()
         {
-            Tracks.Clear();
+            PlaybackTracks.Clear();
             IsPlaybackPanelVisible = false;
             PlayedDuration = string.Empty;
             RemainingDuration = string.Empty;
             CurrentTrackPosition = 0.0;
-            CurrentTrackDuration = 0.0;
-            CurrentTrack = null;
+            CurrentTrackDuration = 0;
+            PlaybackCurrentTrack = null;
         }
 
         /// <summary>
@@ -351,7 +339,7 @@ namespace SonicStreamer.ViewModels
         public void SwitchOnRepeatingMode()
         {
             IsRepeating = true;
-            PlaybackService.Current.SetRepeatingMode(true);
+            PlaybackService.Current.SetLoopMode(true);
         }
 
         /// <summary>
@@ -360,7 +348,7 @@ namespace SonicStreamer.ViewModels
         public void SwitchOffRepeatingMode()
         {
             IsRepeating = false;
-            PlaybackService.Current.SetRepeatingMode(false);
+            PlaybackService.Current.SetLoopMode(false);
         }
 
         #endregion
@@ -369,32 +357,33 @@ namespace SonicStreamer.ViewModels
 
         private void dispatcherTimer_Tick(object sender, object e)
         {
-            // Prüfung notwendig um kurzzeitigen Trackwechsel abzufangen, sofern der Tick noch läuft
-            if (CurrentTrack != null)
+            // Check required to catch change of a track during dispatcher tick
+            if (PlaybackCurrentTrack == null) return;
+            var player = PlaybackService.Current.Player;
+
+            /* Cannot use PlaybackSession.NaturalDuration.TotalSeconds because during download the value
+             * doesn't represent real NaturalDuration. Only use this value in case there was no duration
+             * provided by Subsonic server */
+            int.TryParse(PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackDuration] as string,
+                out int totalDuration);
+            if (totalDuration == 0) totalDuration = (int) player.PlaybackSession.NaturalDuration.TotalSeconds;
+            CurrentTrackDuration = totalDuration;
+            if (!_isSliderPressed) CurrentTrackPosition = player.PlaybackSession.Position.TotalSeconds;
+
+            var remainingDuration = new TimeSpan(0,0, totalDuration) - player.PlaybackSession.Position;
+            PlayedDuration = string.Format("{0}.{1}:{2}",
+                player.PlaybackSession.Position.Hours.ToString("D2"),
+                player.PlaybackSession.Position.Minutes.ToString("D2"),
+                player.PlaybackSession.Position.Seconds.ToString("D2"));
+            RemainingDuration = string.Format("{0}.{1}:{2}",
+                remainingDuration.Hours.ToString("D2"),
+                remainingDuration.Minutes.ToString("D2"),
+                remainingDuration.Seconds.ToString("D2"));
+
+            // verhindert negative remainingDuration beim Repeat oder beim langen Laden
+            if (remainingDuration.TotalSeconds <= 0)
             {
-                var player = PlaybackService.Current.Player;
-                CurrentTrackDuration = CurrentTrack.DurationTime.TotalSeconds;
-                if (!_isSliderPressed)
-                {
-                    CurrentTrackPosition = player.PlaybackSession.Position.TotalSeconds;
-                }
-
-                var remainingDuration = CurrentTrack.DurationTime - player.PlaybackSession.Position;
-
-                PlayedDuration = string.Format("{0}.{1}:{2}",
-                    player.PlaybackSession.Position.Hours.ToString("D2"),
-                    player.PlaybackSession.Position.Minutes.ToString("D2"),
-                    player.PlaybackSession.Position.Seconds.ToString("D2"));
-                RemainingDuration = string.Format("{0}.{1}:{2}",
-                    remainingDuration.Hours.ToString("D2"),
-                    remainingDuration.Minutes.ToString("D2"),
-                    remainingDuration.Seconds.ToString("D2"));
-
-                // verhindert negative remainingDuration beim Repeat oder beim langen Laden
-                if (remainingDuration.TotalSeconds == 0)
-                {
-                    dispatcherTimer_Stop();
-                }
+                dispatcherTimer_Stop();
             }
         }
 

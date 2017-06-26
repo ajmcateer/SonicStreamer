@@ -40,7 +40,7 @@ namespace SonicStreamer.Test.ViewModels
             var playbackVm = new PlaybackViewModel();
             ResourceLoader.Current.SetNewTempResource(playbackVm, Constants.ViewModelPlayback);
             tracks = await GetSampleTracks();
-            await PlaybackService.Current.AddToPlaybackAsync(tracks);
+            PlaybackService.Current.AddToPlaybackAsync(tracks);
             await Task.Delay(2000);
             return playbackVm;
         }
@@ -53,23 +53,22 @@ namespace SonicStreamer.Test.ViewModels
         {
             Assert.AreEqual(
                 PlaybackService.Current.Playback.CurrentItem.Source.CustomProperties[Constants.PlaybackTrackId].ToString
-                    (), playbackVm.CurrentTrack.Id);
+                    (), playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackTrackId]);
             Assert.AreEqual(
                 PlaybackService.Current.Playback.CurrentItem.Source.CustomProperties[Constants.PlaybackArtistId]
-                    .ToString(), playbackVm.CurrentTrack.ArtistId);
+                    .ToString(), playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtistId]);
             Assert.AreEqual(
-                ((CoverArt)
-                    PlaybackService.Current.Playback.CurrentItem.Source.CustomProperties[Constants.PlaybackCover]).Id,
-                playbackVm.CurrentTrack.Cover.Id);
+                PlaybackService.Current.Playback.CurrentItem.Source.CustomProperties[Constants.PlaybackCover],
+                playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackCover]);
             Assert.AreEqual(
                 PlaybackService.Current.Playback.CurrentItem.Source.CustomProperties[Constants.PlaybackDuration]
-                    .ToString(), playbackVm.CurrentTrack.Duration);
+                    .ToString(), playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackDuration]);
 
             var displayProperties = PlaybackService.Current.Playback.CurrentItem.GetDisplayProperties();
-            Assert.AreEqual(displayProperties.MusicProperties.Title, playbackVm.CurrentTrack.Name);
-            Assert.AreEqual(displayProperties.MusicProperties.Artist, playbackVm.CurrentTrack.Artist);
-            Assert.AreEqual(displayProperties.MusicProperties.AlbumTitle, playbackVm.CurrentTrack.Album);
-            Assert.AreEqual(PlaybackService.Current.Playback.Items.Count, playbackVm.Tracks.Count);
+            Assert.AreEqual(displayProperties.MusicProperties.Title, playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackName]);
+            Assert.AreEqual(displayProperties.MusicProperties.Artist, playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtist]);
+            Assert.AreEqual(displayProperties.MusicProperties.AlbumTitle, playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackAlbum]);
+            Assert.AreEqual(PlaybackService.Current.Playback.Items.Count, playbackVm.PlaybackTracks.Count);
         }
 
         [TestMethod]
@@ -78,10 +77,10 @@ namespace SonicStreamer.Test.ViewModels
             using (var playbackVm = new PlaybackViewModel())
             {
                 await playbackVm.LoadDataAsync();
-                Assert.AreEqual(0, playbackVm.Tracks.Count);
+                Assert.AreEqual(0, playbackVm.PlaybackTracks.Count);
                 Assert.AreEqual(Symbol.Play, playbackVm.PlayButtonIcon);
                 Assert.AreEqual(PlaybackViewModel.PlaybackPanelStatus.Large, playbackVm.PanelStaus);
-                Assert.IsNull(playbackVm.CurrentTrack);
+                Assert.IsNull(playbackVm.PlaybackCurrentTrack);
                 Assert.IsNull(playbackVm.CurrentArtistInfo);
                 Assert.IsFalse(playbackVm.IsPlaybackPanelVisible);
                 PlaybackService.Current.ResetPlayabck();
@@ -117,8 +116,8 @@ namespace SonicStreamer.Test.ViewModels
                 AssertCurrentTrack(playbackVm);
 
                 // Add test with duplicates
-                await PlaybackService.Current.AddToPlaybackAsync(tracks, false);
-                Assert.AreEqual(PlaybackService.Current.Playback.Items.Count, playbackVm.Tracks.Count);
+                PlaybackService.Current.AddToPlaybackAsync(tracks, false);
+                Assert.AreEqual(PlaybackService.Current.Playback.Items.Count, playbackVm.PlaybackTracks.Count);
                 PlaybackService.Current.ResetPlayabck();
             }
         }
@@ -145,7 +144,7 @@ namespace SonicStreamer.Test.ViewModels
         {
             using (var playbackVm = await InitNewPlayback(await GetSampleTracks()))
             {
-                playbackVm.Jump(playbackVm.Tracks.Last());
+                playbackVm.Jump(playbackVm.PlaybackTracks.Last());
                 await Task.Delay(2000);
                 AssertCurrentTrack(playbackVm);
                 PlaybackService.Current.ResetPlayabck();
@@ -158,7 +157,7 @@ namespace SonicStreamer.Test.ViewModels
             using (var playbackVm = await InitNewPlayback(await GetSampleTracks()))
             {
                 await playbackVm.LoadDataAsync();
-                Assert.AreEqual(playbackVm.CurrentTrack.Artist, playbackVm.CurrentArtistInfo.Name);
+                Assert.AreEqual(playbackVm.PlaybackCurrentTrack.Source.CustomProperties[Constants.PlaybackArtist], playbackVm.CurrentArtistInfo.Name);
                 Assert.AreNotEqual(playbackVm.CurrentArtistInfo.SocialLinks.Count, 0);
                 PlaybackService.Current.ResetPlayabck();
             }

@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Media;
 using Windows.Media.Playback;
+using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Newtonsoft.Json;
 
 namespace SonicStreamer.Common.System
 {
@@ -17,8 +19,11 @@ namespace SonicStreamer.Common.System
 
         public MediaPlaybackList Playback { get; }
 
+
         private static PlaybackService _current;
         public static PlaybackService Current => _current ?? (_current = new PlaybackService());
+
+        public Dictionary<string, string> CachedPlayableObjects { get; private set; }
 
         protected PlaybackService()
         {
@@ -32,20 +37,62 @@ namespace SonicStreamer.Common.System
                 AutoRepeatEnabled = true,
                 ShuffleEnabled = Convert.ToBoolean(ApplicationData.Current.RoamingSettings.Values["IsShuffling"])
             };
+            CachedPlayableObjects = new Dictionary<string, string>();
+        }
+
+        /// <summary>
+        /// Restores Cached Ids from a JSON file in the LocalFolder
+        /// </summary>
+        public async Task RestoreCachedObjectsAsync()
+        {
+            try
+            {
+                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(Constants.CacheFileName);
+                CachedPlayableObjects = JsonConvert.DeserializeObject<Dictionary<string, string>>(await FileIO.ReadTextAsync(file));
+            }
+            catch
+            {
+                CachedPlayableObjects = new Dictionary<string, string>();
+            }
+            // TODO check if local files really exists in background
+        }
+
+        /// <summary>
+        /// Saves all Cached Ids in a JSON file in the LocalFolder
+        /// </summary>
+        /// <returns></returns>
+        public async Task SaveCachedObjectsAsync()
+        {
+            try
+            {
+                if (CachedPlayableObjects.Count == 0) return;
+                var json = JsonConvert.SerializeObject(CachedPlayableObjects);
+                var file = await ApplicationData.Current.LocalFolder.CreateFileAsync("cache.json", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file, json);
+            }
+            catch
+            {
+                // ignore
+            }
         }
 
         #region Playback Manipulation
 
         /// <summary>
-        /// Konvertiert ein <see cref="Track"/> in ein <see cref="MediaPlaybackItem"/> 
+        /// Converts a <see cref="Track"/> into a <see cref="MediaPlaybackItem"/> 
         /// </summary>
-        private async Task<MediaPlaybackItem> CreatePlaybackItemAsync(SubsonicPlayableObject playableObject)
+        private MediaPlaybackItem CreatePlaybackItemAsync(SubsonicPlayableObject playableObject)
         {
-            var source = Windows.Media.Core.MediaSource.CreateFromUri(await playableObject.GetSource());
+            var source = Windows.Media.Core.MediaSource.CreateFromUri(playableObject.GetSource());
             source.CustomProperties[Constants.PlaybackTrackId] = playableObject.Id;
+            source.CustomProperties[Constants.PlaybackName] = playableObject.Name;
             source.CustomProperties[Constants.PlaybackArtistId] = playableObject.ArtistId;
-            source.CustomProperties[Constants.PlaybackCover] = playableObject.Cover;
+            source.CustomProperties[Constants.PlaybackArtist] = playableObject.Artist;
+            source.CustomProperties[Constants.PlaybackAlbumId] = playableObject.AlbumId;
+            source.CustomProperties[Constants.PlaybackAlbum] = playableObject.Album;
+            source.CustomProperties[Constants.PlaybackCover] = playableObject.Cover.Uri;
             source.CustomProperties[Constants.PlaybackDuration] = playableObject.Duration;
+            source.CustomProperties[Constants.PlaybackDurationOutput] = playableObject.DurationOutput;
             var result = new MediaPlaybackItem(source);
             var displayProperties = result.GetDisplayProperties();
             displayProperties.Type = MediaPlaybackType.Music;
@@ -67,7 +114,7 @@ namespace SonicStreamer.Common.System
         }
 
         /// <summary>
-        /// Prüft ob der übergebene Track bereits in der Wiedergabeliste vorhanden ist
+        /// Checks if the passed <see cref="SubsonicPlayableObject"/> is already available in the playback
         /// </summary>
         private bool DuplicateCheck(SubsonicPlayableObject playbackObject)
         {
@@ -78,11 +125,11 @@ namespace SonicStreamer.Common.System
         }
 
         /// <summary>
-        /// Fügt die Tracks zur Wiedergabeliste hinzu.
+        /// Adds a set of <see cref="SubsonicPlayableObject"/> to the playback
         /// </summary>
-        /// <param name="playableObjects">Hinzuzufügende Tracks</param>
-        /// <param name="newPlayback">True - erstellt ein neues Playback und ersetzt das alte</param>
-        public async Task AddToPlaybackAsync(IEnumerable<SubsonicPlayableObject> playableObjects, bool newPlayback = true)
+        /// <param name="playableObjects">Objects to be added</param>
+        /// <param name="newPlayback">True - creates a new Playback replaces all available objects</param>
+        public void AddToPlaybackAsync(IEnumerable<SubsonicPlayableObject> playableObjects, bool newPlayback = true)
         {
             if (newPlayback)
             {
@@ -91,49 +138,49 @@ namespace SonicStreamer.Common.System
                 playbackVm.Clear();
                 ResetPlayabck();
             }
+
             var wasPlaybackEmpty = Playback.Items.Count == 0;
-            var addedObjects = new List<SubsonicPlayableObject>();
-            foreach (var item in playableObjects)
+            var cleanedList = playableObjects.Where(item => !DuplicateCheck(item)).ToList();
+            foreach (var item in cleanedList)
             {
-                if (DuplicateCheck(item)) continue;
-                Playback.Items.Add(await CreatePlaybackItemAsync(item));
-                addedObjects.Add(item);
+                Playback.Items.Add(CreatePlaybackItemAsync(item));
             }
+
             if (wasPlaybackEmpty && Playback.Items.Count > 0)
             {
                 Player.Source = Playback;
                 Player.Play();
             }
-            UpdatePlaybackViewModelTracks();
+            UpdatePlaybackViewModel();
         }
 
 
         /// <summary>
-        /// Fügt den Track zur Wiedergabeliste hinzu.
+        /// Adds a <see cref="SubsonicPlayableObject"/> to the playback
         /// </summary>
-        /// <param name="playableObject">Hinzuzufügender Track</param>
-        /// <param name="newPlayback">True - erstellt ein neues Playback und ersetzt das alte</param>
-        public async Task AddToPlaybackAsync(SubsonicPlayableObject playableObject, bool newPlayback = true)
+        /// <param name="playableObject">Object to be added</param>
+        /// <param name="newPlayback">True - creates a new Playback replaces all available objects</param>
+        public void AddToPlaybackAsync(SubsonicPlayableObject playableObject, bool newPlayback = true)
         {
-            await AddToPlaybackAsync(new List<SubsonicPlayableObject> {playableObject}, newPlayback);
+            AddToPlaybackAsync(new List<SubsonicPlayableObject> {playableObject}, newPlayback);
         }
 
         /// <summary>
-        /// Fügt alle Tracks eines Albums zur Wiedergabeliste hinzu.
+        /// Adds all Tracks of an Album to the playback
         /// </summary>
-        /// <param name="album">Hinzuzufügendes Album</param>
-        /// <param name="newPlayback">True - erstellt ein neues Playback und ersetzt das alte</param>
-        public async Task AddToPlaybackAsync(Album album, bool newPlayback = true)
+        /// <param name="album">Album to be added</param>
+        /// <param name="newPlayback">True - creates a new Playback replaces all available objects</param>
+        public void AddToPlaybackAsync(Album album, bool newPlayback = true)
         {
-            await AddToPlaybackAsync(album.Tracks, newPlayback);
+            AddToPlaybackAsync(album.Tracks, newPlayback);
         }
 
         /// <summary>
-        /// Fügt alle Tracks eines Interpreten zur Wiedergabeliste hinzu.
+        /// Adds all Tracks of an Artist to the playback
         /// </summary>
-        /// <param name="artist">Hinzuzufügender Interpret</param>
-        /// <param name="newPlayback">True - erstellt ein neues Playback und ersetzt das alte</param>
-        public async Task AddToPlaybackAsync(Artist artist, bool newPlayback = true)
+        /// <param name="artist">Artist to be added</param>
+        /// <param name="newPlayback">True - creates a new Playback replaces all available objects</param>
+        public void AddToPlaybackAsync(Artist artist, bool newPlayback = true)
         {
             var tracks = new List<Track>();
 
@@ -141,11 +188,11 @@ namespace SonicStreamer.Common.System
             {
                 tracks.AddRange(album.Tracks);
             }
-            await AddToPlaybackAsync(tracks, newPlayback);
+            AddToPlaybackAsync(tracks, newPlayback);
         }
 
         /// <summary>
-        /// Setzt die komplette Wiedergabeliste zurück
+        /// Resets the complete playback
         /// </summary>
         public void ResetPlayabck()
         {
@@ -157,48 +204,41 @@ namespace SonicStreamer.Common.System
         }
 
         /// <summary>
-        /// Aktiviert oder Deaktiviert die Zufallswiedergabe beim Playback und aktualisiert das PlaybackViewModel
+        /// Activates or Deactivates Shuffle Mode and updates the <see cref="PlaybackViewModel"/>
         /// </summary>
         public void SetShuffleMode(bool value)
         {
             Playback.ShuffleEnabled = value;
-            UpdatePlaybackViewModelTracks();
+            UpdatePlaybackViewModel();
         }
 
         /// <summary>
-        /// Aktualisiert die Tracks des PlaybackViewModel
+        /// Updates data of the <see cref="PlaybackViewModel"/> after changing the Shuffle Mode
         /// </summary>
-        private void UpdatePlaybackViewModelTracks()
+        private void UpdatePlaybackViewModel()
         {
             var playbackVm = new PlaybackViewModel();
             ResourceLoader.Current.GetResource(ref playbackVm, Constants.ViewModelPlayback);
-            playbackVm.Tracks.Clear();
-            foreach (var item in GetPlaybackObjects())
+            var currentItems = Playback.ShuffleEnabled ? Playback.ShuffledItems.ToList() : Playback.Items.ToList();
+            foreach (var item in currentItems)
             {
-                playbackVm.Tracks.Add(new SubsonicPlayableObject(item));
+                playbackVm.PlaybackTracks.Add(item);
             }
             /* Restore CurrentTrack
              * 
-             * Playback.CurrentItem könnte noch null sein, wenn zum ersten mal Tracks hinzugefügt werden. Der CurrentTrack wird dann
-             * über PlaybackService.Current.Playback.CurrentItemChanged im PlaybackViewModel aktualisiert
+             * It could be possible that Playback.CurrentItem is null after adding Tracks for the first time. 
+             * CurrentTrack will be set via PlaybackService.Current.Playback.CurrentItemChanged in the PlaybackViewModel
             */
-            if (playbackVm.Tracks.Count > 0 && Playback.CurrentItem != null)
+            if (playbackVm.PlaybackTracks.Count > 0 && Playback.CurrentItem != null)
             {
-                var currentObject =
-                    playbackVm.Tracks.FirstOrDefault(
-                        item =>
-                            item.Id == Playback.CurrentItem.Source.CustomProperties[Constants.PlaybackTrackId] as string);
-                if (currentObject != null)
-                {
-                    playbackVm.CurrentTrack = currentObject;
-                }
+                playbackVm.PlaybackCurrentTrack = Playback.CurrentItem;
             }
         }
 
         /// <summary>
-        /// Aktiviert oder Deaktiviert die Wiederholung beim Playback
+        /// Activates or Deactivates Loop Mode
         /// </summary>
-        public void SetRepeatingMode(bool value)
+        public void SetLoopMode(bool value)
         {
             Player.IsLoopingEnabled = value;
         }
@@ -208,7 +248,7 @@ namespace SonicStreamer.Common.System
         #region Playback Handling
 
         /// <summary>
-        /// Startet oder Pausiert die Wiedergabe
+        /// Starts or pauses the playback
         /// </summary>
         public void PlayPause()
         {
@@ -224,7 +264,7 @@ namespace SonicStreamer.Common.System
         }
 
         /// <summary>
-        /// Spielt das nächste Element im Playback ab
+        /// Plays next element in the playback
         /// </summary>
         public void PlayNext()
         {
@@ -232,7 +272,7 @@ namespace SonicStreamer.Common.System
         }
 
         /// <summary>
-        /// Spielt das vorherige Element im Playback ab
+        /// Plays previous element in the playback
         /// </summary>
         public void PlayPrevious()
         {
@@ -240,13 +280,16 @@ namespace SonicStreamer.Common.System
         }
 
         /// <summary>
-        /// Springt im Playback zum übergebenen Wiedergabeobject
+        /// Jumps to the passed <see cref="MediaPlaybackItem"/>
         /// </summary>
-        public void Jump(SubsonicPlayableObject playbackItem)
+        public void Jump(MediaPlaybackItem playbackItem)
         {
             var index =
                 Playback.Items.ToList()
-                    .FindIndex(i => (string) i.Source.CustomProperties[Constants.PlaybackTrackId] == playbackItem.Id);
+                    .FindIndex(
+                        i =>
+                            i.Source.CustomProperties[Constants.PlaybackTrackId] as string ==
+                            playbackItem.Source.CustomProperties[Constants.PlaybackTrackId] as string);
             if (index != -1)
             {
                 Playback.MoveTo((uint) index);
@@ -260,7 +303,7 @@ namespace SonicStreamer.Common.System
         #endregion
 
         /// <summary>
-        /// Gibt alle Wiedergabeobjekte in Abhängigkeit von der Zufallswiedergabe vom Playback zurück 
+        /// Returns all <see cref="MediaPlaybackItem"/> depending on the current Shuffle Mode
         /// </summary>
         public IEnumerable<MediaPlaybackItem> GetPlaybackObjects()
         {

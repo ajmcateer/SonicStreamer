@@ -220,7 +220,7 @@ namespace SonicStreamer.ViewModels
                 foreach (
                     var track in await SubsonicConnector.Current.CurrentConnection.GetPlaylistTracksAsync(playlist.Id))
                 {
-                    track.CheckLocalFile();
+                    track.SetStatus();
                     playlist.Tracks.Add(track);
                 }
             }
@@ -495,15 +495,15 @@ namespace SonicStreamer.ViewModels
         /// <remarks>
         /// Ist kein Track markiert werden alle Tracks abgespielt
         /// </remarks>
-        public async Task PlaySelectionAsync()
+        public void PlaySelection()
         {
             if (SelectedItems.Count > 0)
             {
-                await PlaybackService.Current.AddToPlaybackAsync(SelectedItems);
+                PlaybackService.Current.AddToPlaybackAsync(SelectedItems);
             }
             else
             {
-                await PlaybackService.Current.AddToPlaybackAsync(SelectedPlaylist.Tracks);
+                PlaybackService.Current.AddToPlaybackAsync(SelectedPlaylist.Tracks);
             }
         }
 
@@ -513,25 +513,25 @@ namespace SonicStreamer.ViewModels
         /// <remarks>
         /// Ist kein Track markiert werden alle Tracks abgespielt
         /// </remarks>
-        public async Task AddSelectionAsync()
+        public void AddSelection()
         {
             if (SelectedItems.Count > 0)
             {
-                await PlaybackService.Current.AddToPlaybackAsync(SelectedItems, false);
+                PlaybackService.Current.AddToPlaybackAsync(SelectedItems, false);
             }
             else
             {
-                await PlaybackService.Current.AddToPlaybackAsync(SelectedPlaylist.Tracks, false);
+                PlaybackService.Current.AddToPlaybackAsync(SelectedPlaylist.Tracks, false);
             }
         }
 
         /// <summary>
         /// Bindable Methode um die markierten Elemente abzuspielen. Die existierende Wiedergabe wird ersetzt
         /// </summary>
-        public async void PlayClick()
+        public void PlayClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name, "PlayClick"));
-            await PlaySelectionAsync();
+            PlaySelection();
             if (SettingsVm.IsSelectionCleared)
             {
                 SelectedItems.Clear();
@@ -545,10 +545,10 @@ namespace SonicStreamer.ViewModels
         /// <summary>
         /// Bindable Methode um die markierten Elemente zur Wiedergabe hinzuzufügen.
         /// </summary>
-        public async void AddClick()
+        public void AddClick()
         {
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(string.Format("{0} - {1}", GetType().Name, "AddClick"));
-            await AddSelectionAsync();
+            AddSelection();
             if (SettingsVm.IsSelectionCleared)
             {
                 SelectedItems.Clear();
