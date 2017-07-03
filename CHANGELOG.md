@@ -1,3 +1,6 @@
+### 2.4 Build 6393 (2017-07-03)
+* [Fixed]: After adding tracks the Playback list was not updated correctly
+
 ### 2.4 Build 6386 (2017-06-26)
 * [Fixed]: Performance Improvement: Changed playback creation and Track Cache checks. This should fix Crashes and Hangs for large Playlists
 * [Fixed]: Typo in message for deletion of Track Cache
