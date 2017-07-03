@@ -1,1 +1,1 @@
-E:\Repos\SonicStreamer\SonicStreamer\bin\ARM\Release\Upload\SonicStreamer_2.4.6386.0\SonicStreamer_2.4.6386.0_x86_x64_arm.appxbundle
+E:\Repos\SonicStreamer\SonicStreamer\bin\ARM\Release\Upload\SonicStreamer_2.4.6393.0\SonicStreamer_2.4.6393.0_x86_x64_arm.appxbundle
