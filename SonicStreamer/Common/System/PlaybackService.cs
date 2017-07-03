@@ -219,6 +219,7 @@ namespace SonicStreamer.Common.System
         {
             var playbackVm = new PlaybackViewModel();
             ResourceLoader.Current.GetResource(ref playbackVm, Constants.ViewModelPlayback);
+            playbackVm.PlaybackTracks.Clear();
             var currentItems = Playback.ShuffleEnabled ? Playback.ShuffledItems.ToList() : Playback.Items.ToList();
             foreach (var item in currentItems)
             {
