@@ -99,8 +99,8 @@ namespace SonicStreamer.Common.System
             displayProperties.MusicProperties.Title = playableObject.Name;
             displayProperties.MusicProperties.Artist = playableObject.Artist;
             displayProperties.MusicProperties.AlbumTitle = playableObject.Album;
-            displayProperties.Thumbnail = (playableObject.Cover != null)
-                ? RandomAccessStreamReference.CreateFromUri(new Uri(playableObject.Cover.Uri))
+            displayProperties.Thumbnail = Uri.TryCreate(playableObject.Cover.Uri, UriKind.Absolute, out Uri coverUri)
+                ? RandomAccessStreamReference.CreateFromUri(coverUri)
                 : null;
             var track = playableObject as Track;
             if (track != null)

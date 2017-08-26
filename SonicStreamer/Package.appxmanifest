@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3">
-  <Identity Name="63945AlexanderPreibisch.SonicStreamer" Publisher="CN=141DC0BE-8183-47DF-9FFA-3EAE930B2404" Version="2.4.6393.0" />
+  <Identity Name="63945AlexanderPreibisch.SonicStreamer" Publisher="CN=141DC0BE-8183-47DF-9FFA-3EAE930B2404" Version="2.4.6447.0" />
   <mp:PhoneIdentity PhoneProductId="757bb952-1d9a-48fb-90c6-23dd4b74a4d5" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>SonicStreamer</DisplayName>

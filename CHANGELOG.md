@@ -1,3 +1,6 @@
+### 2.4 Build 6447 (2017-08-26)
+* [Fixed]: Unable to add a Playlist to the Playback due to invalid Cover Uri (issue #47)
+
 ### 2.4 Build 6393 (2017-07-03)
 * [Fixed]: After adding tracks the Playback list was not updated correctly (issue #46)
 
